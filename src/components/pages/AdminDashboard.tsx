@@ -32,11 +32,6 @@ const pathToSection: Record<string, string> = {
   '/heena/admin/support-chat': 'support-chat',
   '/heena/admin/chatbot-settings': 'chatbot-settings',
   '/heena/admin/settings': 'settings',
-  '/heena/admin/personal': 'personal',
-  '/heena/admin/personal/clock': 'personal-clock',
-  '/heena/admin/personal/biography': 'personal-biography',
-  '/heena/admin/personal/notepad': 'personal-notepad',
-  '/heena/admin/personal/profile': 'personal-profile',
 };
 
 const sectionToPublicUrl: Record<string, string | null> = {
