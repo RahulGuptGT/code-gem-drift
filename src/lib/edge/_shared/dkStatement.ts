@@ -132,7 +132,7 @@ export function aggregateStatement(rows: StatementRow[]): AggregatedRoyalty[] {
 export async function readStatementText(bytes: Uint8Array, name = ''): Promise<string> {
   const isZip = bytes[0] === 0x50 && bytes[1] === 0x4b;
   if (!isZip) return new TextDecoder().decode(bytes);
-  const { unzipSync, strFromU8 } = await import('npm:fflate@0.8.2');
+  const { unzipSync, strFromU8 } = await import('fflate');
   const files = unzipSync(bytes);
   const entries = Object.entries(files);
   const pickEntry =
