@@ -1,4 +1,4 @@
-import { POVPost } from '@/pages/RahulPOV';
+import { POVPost } from '@/components/pages/RahulPOV';
 import { POVPostCard } from './POVPostCard';
 import { MessageSquare } from 'lucide-react';
 

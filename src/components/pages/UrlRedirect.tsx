@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { UniversalLoader } from "@/components/ui/UniversalLoader";
 import Layout from '@/components/Layout';
-import NotFound from '@/pages/NotFound';
+import NotFound from '@/components/pages/NotFound';
 
 function isValidRedirect(url: string): boolean {
   try {
