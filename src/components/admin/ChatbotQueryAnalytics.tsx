@@ -49,7 +49,7 @@ const ChatbotQueryAnalytics = () => {
 
       if (error) throw error;
 
-      setQueries(queriesData || []);
+      setQueries((queriesData || []) as any);
 
       // Calculate stats
       const total = queriesData?.length || 0;

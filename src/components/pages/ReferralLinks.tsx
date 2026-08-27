@@ -53,7 +53,7 @@ const ReferralLinks = () => {
 
       if (error) throw error;
       
-      setReferralApps(data || []);
+      setReferralApps((data || []) as any);
       
       // Extract unique categories
       const uniqueCategories = Array.from(new Set(data?.map(app => app.category) || []));

@@ -40,7 +40,7 @@ const ChatbotIndexingPanel = () => {
       if (statusError) {
         console.error("Error fetching status:", statusError);
       } else {
-        setStatus(statusData);
+        setStatus((statusData) as any);
       }
 
       // Fetch indexed pages with keywords
@@ -52,7 +52,7 @@ const ChatbotIndexingPanel = () => {
       if (pagesError) {
         console.error("Error fetching pages:", pagesError);
       } else {
-        setIndexedPages(pagesData || []);
+        setIndexedPages((pagesData || []) as any);
       }
     } catch (error) {
       console.error("Error fetching indexing data:", error);

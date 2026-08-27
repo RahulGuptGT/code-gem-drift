@@ -81,7 +81,7 @@ const PortfolioManagement = () => {
       toast.error('Error fetching portfolio items');
       console.error(error);
     } else {
-      setItems(data || []);
+      setItems((data || []) as any);
     }
   };
 

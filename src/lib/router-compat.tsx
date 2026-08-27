@@ -62,7 +62,7 @@ export function useLocation() {
       pathname: loc.pathname,
       search: loc.searchStr ? (loc.searchStr.startsWith("?") ? loc.searchStr : `?${loc.searchStr}`) : "",
       hash: loc.hash ? (loc.hash.startsWith("#") ? loc.hash : `#${loc.hash}`) : "",
-      state: (loc.state ?? {}) as Record<string, unknown>,
+      state: ((loc.state ?? {}) as unknown) as Record<string, unknown>,
       key: loc.href,
     }),
     [loc],

@@ -83,8 +83,8 @@ const Portfolio = () => {
     if (error) {
       console.error('Error fetching portfolio:', error);
     } else {
-      setItems(data || []);
-      setFilteredItems(data || []);
+      setItems((data || []) as any);
+      setFilteredItems((data || []) as any);
     }
     setIsLoading(false);
   };

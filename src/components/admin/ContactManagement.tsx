@@ -38,7 +38,7 @@ export const ContactManagement = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setSubmissions(data || []);
+      setSubmissions((data || []) as any);
     } catch (error) {
       console.error('Error fetching submissions:', error);
       toast.error('Failed to load submissions');
