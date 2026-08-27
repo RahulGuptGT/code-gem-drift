@@ -2431,7 +2431,7 @@ export async function handler(req: Request): Promise<Response> {
   }
 
   const authHeader = req.headers.get("Authorization") || "";
-  const userClient = createClient(process.env["SUPABASE_URL"]!, process.env["SUPABASE_ANON_KEY"]!, { global: { headers: { Authorization: authHeader } } });
+  const userClient = createClient(process.env["SUPABASE_URL"]!, (process.env["SUPABASE_ANON_KEY"] ?? process.env["SUPABASE_PUBLISHABLE_KEY"])!, { global: { headers: { Authorization: authHeader } } });
   const { data: userData, error: userErr } = await userClient.auth.getUser();
   if (userErr || !userData?.user) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
