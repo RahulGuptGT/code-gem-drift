@@ -1948,7 +1948,7 @@ async function inlineAttachment(a: any, budgetLeft: number): Promise<string | nu
     const res = await fetch(a.url);
     if (!res.ok) return `[Could not read ${a.name || "file"}: HTTP ${res.status}]`;
     if (a.kind === "zip") {
-      const { unzipSync, strFromU8 } = await import("https://esm.sh/fflate@0.8.2");
+      const { unzipSync, strFromU8 } = await import("fflate");
       const buf = new Uint8Array(await res.arrayBuffer());
       const entries = unzipSync(buf);
       const names = Object.keys(entries);

@@ -27,6 +27,18 @@ import { Route as PovIndexRouteImport } from './routes/pov/index'
 import { Route as PovCategoryRouteImport } from './routes/pov/$category'
 import { Route as ReferralsIndexRouteImport } from './routes/referrals/index'
 import { Route as ReferralsCategoryRouteImport } from './routes/referrals/$category'
+import { Route as ApiPublicAnalyticsInsightsRouteImport } from './routes/api/public/analytics-insights'
+import { Route as ApiPublicIndexSiteContentRouteImport } from './routes/api/public/index-site-content'
+import { Route as ApiPublicLogAuthEventRouteImport } from './routes/api/public/log-auth-event'
+import { Route as ApiPublicRamoguChatRouteImport } from './routes/api/public/ramogu-chat'
+import { Route as ApiPublicRazorpayCreateOrderRouteImport } from './routes/api/public/razorpay-create-order'
+import { Route as ApiPublicRazorpayVerifyPaymentRouteImport } from './routes/api/public/razorpay-verify-payment'
+import { Route as ApiPublicRazorpayWebhookRouteImport } from './routes/api/public/razorpay-webhook'
+import { Route as ApiPublicSmartIndexSiteRouteImport } from './routes/api/public/smart-index-site'
+import { Route as ApiPublicTrackAnalyticsRouteImport } from './routes/api/public/track-analytics'
+import { Route as ApiPublicTrackUrlClickRouteImport } from './routes/api/public/track-url-click'
+import { Route as ApiPublicTranscribeAudioRouteImport } from './routes/api/public/transcribe-audio'
+import { Route as ApiPublicWorkspaceAiChatRouteImport } from './routes/api/public/workspace-ai-chat'
 import { Route as HeenaAdminIndexRouteImport } from './routes/heena/admin.index'
 import { Route as HeenaAdminSplatRouteImport } from './routes/heena/admin.$'
 
@@ -120,6 +132,73 @@ const ReferralsCategoryRoute = ReferralsCategoryRouteImport.update({
   path: '/referrals/$category',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAnalyticsInsightsRoute =
+  ApiPublicAnalyticsInsightsRouteImport.update({
+    id: '/api/public/analytics-insights',
+    path: '/api/public/analytics-insights',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicIndexSiteContentRoute =
+  ApiPublicIndexSiteContentRouteImport.update({
+    id: '/api/public/index-site-content',
+    path: '/api/public/index-site-content',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicLogAuthEventRoute = ApiPublicLogAuthEventRouteImport.update({
+  id: '/api/public/log-auth-event',
+  path: '/api/public/log-auth-event',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRamoguChatRoute = ApiPublicRamoguChatRouteImport.update({
+  id: '/api/public/ramogu-chat',
+  path: '/api/public/ramogu-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRazorpayCreateOrderRoute =
+  ApiPublicRazorpayCreateOrderRouteImport.update({
+    id: '/api/public/razorpay-create-order',
+    path: '/api/public/razorpay-create-order',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRazorpayVerifyPaymentRoute =
+  ApiPublicRazorpayVerifyPaymentRouteImport.update({
+    id: '/api/public/razorpay-verify-payment',
+    path: '/api/public/razorpay-verify-payment',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRazorpayWebhookRoute =
+  ApiPublicRazorpayWebhookRouteImport.update({
+    id: '/api/public/razorpay-webhook',
+    path: '/api/public/razorpay-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicSmartIndexSiteRoute = ApiPublicSmartIndexSiteRouteImport.update({
+  id: '/api/public/smart-index-site',
+  path: '/api/public/smart-index-site',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTrackAnalyticsRoute = ApiPublicTrackAnalyticsRouteImport.update({
+  id: '/api/public/track-analytics',
+  path: '/api/public/track-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTrackUrlClickRoute = ApiPublicTrackUrlClickRouteImport.update({
+  id: '/api/public/track-url-click',
+  path: '/api/public/track-url-click',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTranscribeAudioRoute =
+  ApiPublicTranscribeAudioRouteImport.update({
+    id: '/api/public/transcribe-audio',
+    path: '/api/public/transcribe-audio',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicWorkspaceAiChatRoute =
+  ApiPublicWorkspaceAiChatRouteImport.update({
+    id: '/api/public/workspace-ai-chat',
+    path: '/api/public/workspace-ai-chat',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const HeenaAdminIndexRoute = HeenaAdminIndexRouteImport.update({
   id: '/heena/admin/',
   path: '/heena/admin/',
@@ -150,6 +229,18 @@ export interface FileRoutesByFullPath {
   '/portfolio/': typeof PortfolioIndexRoute
   '/pov/': typeof PovIndexRoute
   '/referrals/': typeof ReferralsIndexRoute
+  '/api/public/analytics-insights': typeof ApiPublicAnalyticsInsightsRoute
+  '/api/public/index-site-content': typeof ApiPublicIndexSiteContentRoute
+  '/api/public/log-auth-event': typeof ApiPublicLogAuthEventRoute
+  '/api/public/ramogu-chat': typeof ApiPublicRamoguChatRoute
+  '/api/public/razorpay-create-order': typeof ApiPublicRazorpayCreateOrderRoute
+  '/api/public/razorpay-verify-payment': typeof ApiPublicRazorpayVerifyPaymentRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
+  '/api/public/smart-index-site': typeof ApiPublicSmartIndexSiteRoute
+  '/api/public/track-analytics': typeof ApiPublicTrackAnalyticsRoute
+  '/api/public/track-url-click': typeof ApiPublicTrackUrlClickRoute
+  '/api/public/transcribe-audio': typeof ApiPublicTranscribeAudioRoute
+  '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
 }
@@ -172,6 +263,18 @@ export interface FileRoutesByTo {
   '/portfolio': typeof PortfolioIndexRoute
   '/pov': typeof PovIndexRoute
   '/referrals': typeof ReferralsIndexRoute
+  '/api/public/analytics-insights': typeof ApiPublicAnalyticsInsightsRoute
+  '/api/public/index-site-content': typeof ApiPublicIndexSiteContentRoute
+  '/api/public/log-auth-event': typeof ApiPublicLogAuthEventRoute
+  '/api/public/ramogu-chat': typeof ApiPublicRamoguChatRoute
+  '/api/public/razorpay-create-order': typeof ApiPublicRazorpayCreateOrderRoute
+  '/api/public/razorpay-verify-payment': typeof ApiPublicRazorpayVerifyPaymentRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
+  '/api/public/smart-index-site': typeof ApiPublicSmartIndexSiteRoute
+  '/api/public/track-analytics': typeof ApiPublicTrackAnalyticsRoute
+  '/api/public/track-url-click': typeof ApiPublicTrackUrlClickRoute
+  '/api/public/transcribe-audio': typeof ApiPublicTranscribeAudioRoute
+  '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin': typeof HeenaAdminIndexRoute
 }
@@ -195,6 +298,18 @@ export interface FileRoutesById {
   '/portfolio/': typeof PortfolioIndexRoute
   '/pov/': typeof PovIndexRoute
   '/referrals/': typeof ReferralsIndexRoute
+  '/api/public/analytics-insights': typeof ApiPublicAnalyticsInsightsRoute
+  '/api/public/index-site-content': typeof ApiPublicIndexSiteContentRoute
+  '/api/public/log-auth-event': typeof ApiPublicLogAuthEventRoute
+  '/api/public/ramogu-chat': typeof ApiPublicRamoguChatRoute
+  '/api/public/razorpay-create-order': typeof ApiPublicRazorpayCreateOrderRoute
+  '/api/public/razorpay-verify-payment': typeof ApiPublicRazorpayVerifyPaymentRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
+  '/api/public/smart-index-site': typeof ApiPublicSmartIndexSiteRoute
+  '/api/public/track-analytics': typeof ApiPublicTrackAnalyticsRoute
+  '/api/public/track-url-click': typeof ApiPublicTrackUrlClickRoute
+  '/api/public/transcribe-audio': typeof ApiPublicTranscribeAudioRoute
+  '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
 }
@@ -219,6 +334,18 @@ export interface FileRouteTypes {
     | '/portfolio/'
     | '/pov/'
     | '/referrals/'
+    | '/api/public/analytics-insights'
+    | '/api/public/index-site-content'
+    | '/api/public/log-auth-event'
+    | '/api/public/ramogu-chat'
+    | '/api/public/razorpay-create-order'
+    | '/api/public/razorpay-verify-payment'
+    | '/api/public/razorpay-webhook'
+    | '/api/public/smart-index-site'
+    | '/api/public/track-analytics'
+    | '/api/public/track-url-click'
+    | '/api/public/transcribe-audio'
+    | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -241,6 +368,18 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/pov'
     | '/referrals'
+    | '/api/public/analytics-insights'
+    | '/api/public/index-site-content'
+    | '/api/public/log-auth-event'
+    | '/api/public/ramogu-chat'
+    | '/api/public/razorpay-create-order'
+    | '/api/public/razorpay-verify-payment'
+    | '/api/public/razorpay-webhook'
+    | '/api/public/smart-index-site'
+    | '/api/public/track-analytics'
+    | '/api/public/track-url-click'
+    | '/api/public/transcribe-audio'
+    | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin'
   id:
@@ -263,6 +402,18 @@ export interface FileRouteTypes {
     | '/portfolio/'
     | '/pov/'
     | '/referrals/'
+    | '/api/public/analytics-insights'
+    | '/api/public/index-site-content'
+    | '/api/public/log-auth-event'
+    | '/api/public/ramogu-chat'
+    | '/api/public/razorpay-create-order'
+    | '/api/public/razorpay-verify-payment'
+    | '/api/public/razorpay-webhook'
+    | '/api/public/smart-index-site'
+    | '/api/public/track-analytics'
+    | '/api/public/track-url-click'
+    | '/api/public/transcribe-audio'
+    | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin/'
   fileRoutesById: FileRoutesById
@@ -286,6 +437,18 @@ export interface RootRouteChildren {
   PortfolioIndexRoute: typeof PortfolioIndexRoute
   PovIndexRoute: typeof PovIndexRoute
   ReferralsIndexRoute: typeof ReferralsIndexRoute
+  ApiPublicAnalyticsInsightsRoute: typeof ApiPublicAnalyticsInsightsRoute
+  ApiPublicIndexSiteContentRoute: typeof ApiPublicIndexSiteContentRoute
+  ApiPublicLogAuthEventRoute: typeof ApiPublicLogAuthEventRoute
+  ApiPublicRamoguChatRoute: typeof ApiPublicRamoguChatRoute
+  ApiPublicRazorpayCreateOrderRoute: typeof ApiPublicRazorpayCreateOrderRoute
+  ApiPublicRazorpayVerifyPaymentRoute: typeof ApiPublicRazorpayVerifyPaymentRoute
+  ApiPublicRazorpayWebhookRoute: typeof ApiPublicRazorpayWebhookRoute
+  ApiPublicSmartIndexSiteRoute: typeof ApiPublicSmartIndexSiteRoute
+  ApiPublicTrackAnalyticsRoute: typeof ApiPublicTrackAnalyticsRoute
+  ApiPublicTrackUrlClickRoute: typeof ApiPublicTrackUrlClickRoute
+  ApiPublicTranscribeAudioRoute: typeof ApiPublicTranscribeAudioRoute
+  ApiPublicWorkspaceAiChatRoute: typeof ApiPublicWorkspaceAiChatRoute
   HeenaAdminSplatRoute: typeof HeenaAdminSplatRoute
   HeenaAdminIndexRoute: typeof HeenaAdminIndexRoute
 }
@@ -418,6 +581,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReferralsCategoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/analytics-insights': {
+      id: '/api/public/analytics-insights'
+      path: '/api/public/analytics-insights'
+      fullPath: '/api/public/analytics-insights'
+      preLoaderRoute: typeof ApiPublicAnalyticsInsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/index-site-content': {
+      id: '/api/public/index-site-content'
+      path: '/api/public/index-site-content'
+      fullPath: '/api/public/index-site-content'
+      preLoaderRoute: typeof ApiPublicIndexSiteContentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/log-auth-event': {
+      id: '/api/public/log-auth-event'
+      path: '/api/public/log-auth-event'
+      fullPath: '/api/public/log-auth-event'
+      preLoaderRoute: typeof ApiPublicLogAuthEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/ramogu-chat': {
+      id: '/api/public/ramogu-chat'
+      path: '/api/public/ramogu-chat'
+      fullPath: '/api/public/ramogu-chat'
+      preLoaderRoute: typeof ApiPublicRamoguChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/razorpay-create-order': {
+      id: '/api/public/razorpay-create-order'
+      path: '/api/public/razorpay-create-order'
+      fullPath: '/api/public/razorpay-create-order'
+      preLoaderRoute: typeof ApiPublicRazorpayCreateOrderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/razorpay-verify-payment': {
+      id: '/api/public/razorpay-verify-payment'
+      path: '/api/public/razorpay-verify-payment'
+      fullPath: '/api/public/razorpay-verify-payment'
+      preLoaderRoute: typeof ApiPublicRazorpayVerifyPaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/razorpay-webhook': {
+      id: '/api/public/razorpay-webhook'
+      path: '/api/public/razorpay-webhook'
+      fullPath: '/api/public/razorpay-webhook'
+      preLoaderRoute: typeof ApiPublicRazorpayWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/smart-index-site': {
+      id: '/api/public/smart-index-site'
+      path: '/api/public/smart-index-site'
+      fullPath: '/api/public/smart-index-site'
+      preLoaderRoute: typeof ApiPublicSmartIndexSiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/track-analytics': {
+      id: '/api/public/track-analytics'
+      path: '/api/public/track-analytics'
+      fullPath: '/api/public/track-analytics'
+      preLoaderRoute: typeof ApiPublicTrackAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/track-url-click': {
+      id: '/api/public/track-url-click'
+      path: '/api/public/track-url-click'
+      fullPath: '/api/public/track-url-click'
+      preLoaderRoute: typeof ApiPublicTrackUrlClickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/transcribe-audio': {
+      id: '/api/public/transcribe-audio'
+      path: '/api/public/transcribe-audio'
+      fullPath: '/api/public/transcribe-audio'
+      preLoaderRoute: typeof ApiPublicTranscribeAudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/workspace-ai-chat': {
+      id: '/api/public/workspace-ai-chat'
+      path: '/api/public/workspace-ai-chat'
+      fullPath: '/api/public/workspace-ai-chat'
+      preLoaderRoute: typeof ApiPublicWorkspaceAiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/heena/admin/': {
       id: '/heena/admin/'
       path: '/heena/admin'
@@ -454,6 +701,18 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioIndexRoute: PortfolioIndexRoute,
   PovIndexRoute: PovIndexRoute,
   ReferralsIndexRoute: ReferralsIndexRoute,
+  ApiPublicAnalyticsInsightsRoute: ApiPublicAnalyticsInsightsRoute,
+  ApiPublicIndexSiteContentRoute: ApiPublicIndexSiteContentRoute,
+  ApiPublicLogAuthEventRoute: ApiPublicLogAuthEventRoute,
+  ApiPublicRamoguChatRoute: ApiPublicRamoguChatRoute,
+  ApiPublicRazorpayCreateOrderRoute: ApiPublicRazorpayCreateOrderRoute,
+  ApiPublicRazorpayVerifyPaymentRoute: ApiPublicRazorpayVerifyPaymentRoute,
+  ApiPublicRazorpayWebhookRoute: ApiPublicRazorpayWebhookRoute,
+  ApiPublicSmartIndexSiteRoute: ApiPublicSmartIndexSiteRoute,
+  ApiPublicTrackAnalyticsRoute: ApiPublicTrackAnalyticsRoute,
+  ApiPublicTrackUrlClickRoute: ApiPublicTrackUrlClickRoute,
+  ApiPublicTranscribeAudioRoute: ApiPublicTranscribeAudioRoute,
+  ApiPublicWorkspaceAiChatRoute: ApiPublicWorkspaceAiChatRoute,
   HeenaAdminSplatRoute: HeenaAdminSplatRoute,
   HeenaAdminIndexRoute: HeenaAdminIndexRoute,
 }
