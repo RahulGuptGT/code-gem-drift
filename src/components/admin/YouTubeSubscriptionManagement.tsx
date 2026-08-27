@@ -144,7 +144,7 @@ const YouTubeSubscriptionManagement = () => {
       .order('slot_number', { ascending: true, nullsFirst: false });
 
     if (!error && data) {
-      setSubscriptions(data);
+      setSubscriptions((data) as any);
     }
     setLoading(false);
   };

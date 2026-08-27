@@ -75,7 +75,7 @@ export const ReferralLinksManagement = () => {
         .order('display_order', { ascending: true });
 
       if (error) throw error;
-      setLinks(data || []);
+      setLinks((data || []) as any);
     } catch (error) {
       console.error('Error fetching referral links:', error);
       toast.error('Failed to fetch referral links');

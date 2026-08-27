@@ -13,11 +13,6 @@ import PortfolioManagement from '@/components/admin/PortfolioManagement';
 import UrlShortenerManagement from '@/components/admin/UrlShortenerManagement';
 import AppManagement from '@/components/admin/AppManagement';
 import POVManagement from '@/components/admin/POVManagement';
-import AdminPersonalLanding from '@/pages/personal/AdminPersonalLanding';
-import AdminClock from '@/components/admin/personal/AdminClock';
-import AdminBiography from '@/components/admin/personal/AdminBiography';
-import AdminNotepad from '@/components/admin/personal/AdminNotepad';
-import AdminPeople from '@/components/admin/personal/AdminPeople';
 import VisitorProfiles from '@/components/admin/VisitorProfiles';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Menu } from 'lucide-react';
@@ -37,11 +32,6 @@ const pathToSection: Record<string, string> = {
   '/heena/admin/support-chat': 'support-chat',
   '/heena/admin/chatbot-settings': 'chatbot-settings',
   '/heena/admin/settings': 'settings',
-  '/heena/admin/personal': 'personal',
-  '/heena/admin/personal/clock': 'personal-clock',
-  '/heena/admin/personal/biography': 'personal-biography',
-  '/heena/admin/personal/notepad': 'personal-notepad',
-  '/heena/admin/personal/profile': 'personal-profile',
 };
 
 const sectionToPublicUrl: Record<string, string | null> = {
@@ -57,11 +47,6 @@ const sectionToPublicUrl: Record<string, string | null> = {
   'support-chat': null,
   'chatbot-settings': null,
   'settings': '/',
-  'personal': '/personal',
-  'personal-clock': '/personal/clock',
-  'personal-biography': '/personal/biography',
-  'personal-notepad': '/personal/notepad',
-  'personal-profile': '/personal/profile',
 };
 
 function getActiveSection(pathname: string): string {
@@ -110,11 +95,6 @@ export default function AdminDashboard() {
       case 'support-chat': return <SupportChatManagement />;
       case 'chatbot-settings': return <ChatbotSettings />;
       case 'settings': return <SiteSettingsManagement />;
-      case 'personal': return <AdminPersonalLanding />;
-      case 'personal-clock': return <AdminClock />;
-      case 'personal-biography': return <AdminBiography />;
-      case 'personal-notepad': return <AdminNotepad />;
-      case 'personal-profile': return <AdminPeople />;
       default: return <DashboardOverview />;
     }
   };

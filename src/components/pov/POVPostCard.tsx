@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { POVPost } from '@/pages/RahulPOV';
+import { POVPost } from '@/components/pages/RahulPOV';
 import { supabase } from '@/integrations/supabase/client';
 import { ThumbsUp, ThumbsDown, MessageCircle, Flame, Clock, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';

@@ -6,8 +6,19 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  ClientOnly,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { LightboxProvider } from "@/components/ui/AttachmentLightbox";
+import { ThemeProvider } from "@/hooks/useTheme";
+import { AuthProvider } from "@/hooks/useAuth";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
+import RouteLoader from "@/components/ui/RouteLoader";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -119,8 +130,26 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <TooltipProvider>
+        <LightboxProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <Toaster />
+              <Sonner />
+              <ClientOnly fallback={null}>
+                <AnalyticsTracker />
+              </ClientOnly>
+              <ClientOnly fallback={null}>
+                <RouteLoader />
+              </ClientOnly>
+              <ErrorBoundary>
+                {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+                <Outlet />
+              </ErrorBoundary>
+            </AuthProvider>
+          </ThemeProvider>
+        </LightboxProvider>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

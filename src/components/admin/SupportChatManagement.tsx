@@ -128,7 +128,7 @@ const SupportChatManagement = () => {
         avgRating: parseFloat(avgRating.toFixed(1)),
       });
 
-      setRecentSessions(recent || []);
+      setRecentSessions((recent || []) as any);
       setPageStats(pageStatsArray);
       setDailyTrends(trendsArray);
     } catch (error) {
