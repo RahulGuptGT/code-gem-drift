@@ -5,7 +5,7 @@ import { syncCachesForTool } from '@/lib/dkCacheSync';
 import { toast } from 'sonner';
 import { safeStorage } from '@/lib/safeStorage';
 
-const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/workspace-ai-chat`;
+const FN_URL = '/api/public/workspace-ai-chat';
 
 const AUTO_APPROVE_KEY = 'wsai:auto-approve';
 const MODEL_KEY = 'wsai:model';

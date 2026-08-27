@@ -15,7 +15,7 @@ import {
   type Persona,
 } from "@/lib/supportChatStorage";
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ramogu-chat`;
+const CHAT_URL = '/api/public/ramogu-chat';
 
 const READ_PAGE_KEYWORDS = [
   "page", "yahan", "is page", "isme", "dekho", "padho", "read",

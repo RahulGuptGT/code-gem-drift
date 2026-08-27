@@ -1,3 +1,4 @@
+import { invokeFn } from '@/lib/invokeFn';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -98,7 +99,7 @@ export function useVoiceRecorder(onTranscript: (text: string) => void): UseVoice
       .upload(path, blob, { contentType: type });
     if (upErr) throw new Error('Upload: ' + upErr.message);
     try {
-      const { data, error } = await supabase.functions.invoke('transcribe-audio', {
+      const { data, error } = await invokeFn('transcribe-audio', {
         body: { storage_path: path },
       });
       if (error) throw new Error('Transcribe: ' + error.message);
