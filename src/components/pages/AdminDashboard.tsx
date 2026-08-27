@@ -47,11 +47,6 @@ const sectionToPublicUrl: Record<string, string | null> = {
   'support-chat': null,
   'chatbot-settings': null,
   'settings': '/',
-  'personal': '/personal',
-  'personal-clock': '/personal/clock',
-  'personal-biography': '/personal/biography',
-  'personal-notepad': '/personal/notepad',
-  'personal-profile': '/personal/profile',
 };
 
 function getActiveSection(pathname: string): string {
