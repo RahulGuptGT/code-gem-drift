@@ -1,0 +1,32 @@
+# Rahul Gupta
+
+> Personal website of Rahul Gupta — a Class 12 student and creator from Bihar, India. Includes study tools, Class 10 results lookup, referral offers, portfolio projects, and personal POVs (opinions and discussions).
+
+## Pages
+
+- [Home](/): Overview, introductions, and highlights.
+- [About](/about): About Rahul Gupta, background, interests, and mission.
+- [Contact](/contact): Email, WhatsApp, and message form.
+- [Portfolio](/portfolio): Websites, apps, and tools built by Rahul.
+- [Portfolio — Websites](/portfolio/websites): Web projects.
+- [Portfolio — Apps](/portfolio/apps): Mobile and cross-platform apps.
+- [Portfolio — Tools](/portfolio/tools): Standalone utilities.
+- [Referral Links](/referrals): Curated referral offers (UPI, shopping, food).
+- [Referrals — UPI](/referrals/upi): UPI app referrals.
+- [Referrals — Shopping](/referrals/shopping): Shopping app referrals.
+- [Referrals — Food](/referrals/food): Food app referrals.
+- [POVs](/pov): Discussion platform — quick takes, deep POVs, and Q&A.
+- [POV — Philosophy](/pov/philosophy): Philosophical reflections.
+- [POV — Society](/pov/society): Society-focused posts.
+- [POV — Politics](/pov/politics): Political commentary.
+- [POV — Personal](/pov/personal): Personal POVs.
+- [Fund Rahul](/fund-rahul): Support Rahul's work.
+- [Site Map](/site-map): All public pages and sections.
+
+## Optional
+
+- [Privacy Policy](/legal/privacy-policy)
+- [Terms & Conditions](/legal/terms-and-conditions)
+- [Disclaimer](/legal/disclaimer)
+- [Refund Policy](/legal/refund-policy)
+- [Cancellation Policy](/legal/cancellation-policy)

@@ -12,3 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /heena
+Disallow: /personal
+
+Sitemap: https://rahulgupta3-71507-81862.lovable.app/sitemap.xml
