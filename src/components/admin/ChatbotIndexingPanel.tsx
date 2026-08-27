@@ -88,7 +88,7 @@ const ChatbotIndexingPanel = () => {
     setIsReindexing(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/index-site-content`,
+        '/api/public/index-site-content',
         {
           method: "POST",
           headers: {
@@ -120,7 +120,7 @@ const ChatbotIndexingPanel = () => {
     
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/smart-index-site`,
+        '/api/public/smart-index-site',
         {
           method: "POST",
           headers: {

@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Session } from '@supabase/supabase-js';
 
-const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/log-auth-event`;
+const FN_URL = '/api/public/log-auth-event';
 const COOLDOWN_MS = 60_000; // dedupe refresh-style events
 
 let reauthInFlight = false;

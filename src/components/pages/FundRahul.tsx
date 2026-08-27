@@ -1,3 +1,4 @@
+import { invokeFn } from '@/lib/invokeFn';
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -82,7 +83,7 @@ const FundRahul = () => {
       const ok = await loadRazorpayScript();
       if (!ok) throw new Error("Razorpay SDK failed to load");
 
-      const { data, error } = await supabase.functions.invoke("razorpay-create-order", {
+      const { data, error } = await invokeFn("razorpay-create-order", {
         body: { amount: finalAmount, name: name.trim() || null, message: message.trim() || null },
       });
       if (error) throw error;
@@ -102,7 +103,7 @@ const FundRahul = () => {
         theme: { color: "#6366f1" },
         handler: async (resp: any) => {
           try {
-            const { error: vErr } = await supabase.functions.invoke("razorpay-verify-payment", {
+            const { error: vErr } = await invokeFn("razorpay-verify-payment", {
               body: {
                 razorpay_order_id: resp.razorpay_order_id,
                 razorpay_payment_id: resp.razorpay_payment_id,

@@ -1,3 +1,4 @@
+import { invokeFn } from '@/lib/invokeFn';
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -687,7 +688,7 @@ const AdvancedAnalyticsDashboard = () => {
                     setInsightsLoading(true);
                     setInsightsError('');
                     try {
-                      const { data, error } = await supabase.functions.invoke('analytics-insights', {
+                      const { data, error } = await invokeFn('analytics-insights', {
                         body: {
                           stats,
                           topPages: topPages.slice(0, 5),

@@ -1,3 +1,4 @@
+import { invokeFn } from '@/lib/invokeFn';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -47,7 +48,7 @@ export default function UrlRedirect() {
         return;
       }
 
-      await supabase.functions.invoke('track-url-click', { body: { code } });
+      await invokeFn('track-url-click', { body: { code } });
       window.location.href = data.original_url;
     };
 
