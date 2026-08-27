@@ -10,33 +10,284 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CodeRouteImport } from './routes/$code'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FundRahulRouteImport } from './routes/fund-rahul'
+import { Route as SiteMapRouteImport } from './routes/site-map'
+import { Route as HeenaIndexRouteImport } from './routes/heena/index'
+import { Route as LegalCancellationPolicyRouteImport } from './routes/legal/cancellation-policy'
+import { Route as LegalDisclaimerRouteImport } from './routes/legal/disclaimer'
+import { Route as LegalPrivacyPolicyRouteImport } from './routes/legal/privacy-policy'
+import { Route as LegalRefundPolicyRouteImport } from './routes/legal/refund-policy'
+import { Route as LegalTermsAndConditionsRouteImport } from './routes/legal/terms-and-conditions'
+import { Route as PortfolioIndexRouteImport } from './routes/portfolio/index'
+import { Route as PortfolioCategoryRouteImport } from './routes/portfolio/$category'
+import { Route as PovIndexRouteImport } from './routes/pov/index'
+import { Route as PovCategoryRouteImport } from './routes/pov/$category'
+import { Route as ReferralsIndexRouteImport } from './routes/referrals/index'
+import { Route as ReferralsCategoryRouteImport } from './routes/referrals/$category'
+import { Route as HeenaAdminIndexRouteImport } from './routes/heena/admin.index'
+import { Route as HeenaAdminSplatRouteImport } from './routes/heena/admin.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CodeRoute = CodeRouteImport.update({
+  id: '/$code',
+  path: '/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FundRahulRoute = FundRahulRouteImport.update({
+  id: '/fund-rahul',
+  path: '/fund-rahul',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteMapRoute = SiteMapRouteImport.update({
+  id: '/site-map',
+  path: '/site-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeenaIndexRoute = HeenaIndexRouteImport.update({
+  id: '/heena/',
+  path: '/heena/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalCancellationPolicyRoute = LegalCancellationPolicyRouteImport.update({
+  id: '/legal/cancellation-policy',
+  path: '/legal/cancellation-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalDisclaimerRoute = LegalDisclaimerRouteImport.update({
+  id: '/legal/disclaimer',
+  path: '/legal/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalPrivacyPolicyRoute = LegalPrivacyPolicyRouteImport.update({
+  id: '/legal/privacy-policy',
+  path: '/legal/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRefundPolicyRoute = LegalRefundPolicyRouteImport.update({
+  id: '/legal/refund-policy',
+  path: '/legal/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalTermsAndConditionsRoute = LegalTermsAndConditionsRouteImport.update({
+  id: '/legal/terms-and-conditions',
+  path: '/legal/terms-and-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioIndexRoute = PortfolioIndexRouteImport.update({
+  id: '/portfolio/',
+  path: '/portfolio/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioCategoryRoute = PortfolioCategoryRouteImport.update({
+  id: '/portfolio/$category',
+  path: '/portfolio/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PovIndexRoute = PovIndexRouteImport.update({
+  id: '/pov/',
+  path: '/pov/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PovCategoryRoute = PovCategoryRouteImport.update({
+  id: '/pov/$category',
+  path: '/pov/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferralsIndexRoute = ReferralsIndexRouteImport.update({
+  id: '/referrals/',
+  path: '/referrals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferralsCategoryRoute = ReferralsCategoryRouteImport.update({
+  id: '/referrals/$category',
+  path: '/referrals/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeenaAdminIndexRoute = HeenaAdminIndexRouteImport.update({
+  id: '/heena/admin/',
+  path: '/heena/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeenaAdminSplatRoute = HeenaAdminSplatRouteImport.update({
+  id: '/heena/admin/$',
+  path: '/heena/admin/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$code': typeof CodeRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/fund-rahul': typeof FundRahulRoute
+  '/site-map': typeof SiteMapRoute
+  '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
+  '/legal/disclaimer': typeof LegalDisclaimerRoute
+  '/legal/privacy-policy': typeof LegalPrivacyPolicyRoute
+  '/legal/refund-policy': typeof LegalRefundPolicyRoute
+  '/legal/terms-and-conditions': typeof LegalTermsAndConditionsRoute
+  '/portfolio/$category': typeof PortfolioCategoryRoute
+  '/pov/$category': typeof PovCategoryRoute
+  '/referrals/$category': typeof ReferralsCategoryRoute
+  '/heena/': typeof HeenaIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
+  '/pov/': typeof PovIndexRoute
+  '/referrals/': typeof ReferralsIndexRoute
+  '/heena/admin/$': typeof HeenaAdminSplatRoute
+  '/heena/admin/': typeof HeenaAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$code': typeof CodeRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/fund-rahul': typeof FundRahulRoute
+  '/site-map': typeof SiteMapRoute
+  '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
+  '/legal/disclaimer': typeof LegalDisclaimerRoute
+  '/legal/privacy-policy': typeof LegalPrivacyPolicyRoute
+  '/legal/refund-policy': typeof LegalRefundPolicyRoute
+  '/legal/terms-and-conditions': typeof LegalTermsAndConditionsRoute
+  '/portfolio/$category': typeof PortfolioCategoryRoute
+  '/pov/$category': typeof PovCategoryRoute
+  '/referrals/$category': typeof ReferralsCategoryRoute
+  '/heena': typeof HeenaIndexRoute
+  '/portfolio': typeof PortfolioIndexRoute
+  '/pov': typeof PovIndexRoute
+  '/referrals': typeof ReferralsIndexRoute
+  '/heena/admin/$': typeof HeenaAdminSplatRoute
+  '/heena/admin': typeof HeenaAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$code': typeof CodeRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/fund-rahul': typeof FundRahulRoute
+  '/site-map': typeof SiteMapRoute
+  '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
+  '/legal/disclaimer': typeof LegalDisclaimerRoute
+  '/legal/privacy-policy': typeof LegalPrivacyPolicyRoute
+  '/legal/refund-policy': typeof LegalRefundPolicyRoute
+  '/legal/terms-and-conditions': typeof LegalTermsAndConditionsRoute
+  '/portfolio/$category': typeof PortfolioCategoryRoute
+  '/pov/$category': typeof PovCategoryRoute
+  '/referrals/$category': typeof ReferralsCategoryRoute
+  '/heena/': typeof HeenaIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
+  '/pov/': typeof PovIndexRoute
+  '/referrals/': typeof ReferralsIndexRoute
+  '/heena/admin/$': typeof HeenaAdminSplatRoute
+  '/heena/admin/': typeof HeenaAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/$code'
+    | '/about'
+    | '/contact'
+    | '/fund-rahul'
+    | '/site-map'
+    | '/legal/cancellation-policy'
+    | '/legal/disclaimer'
+    | '/legal/privacy-policy'
+    | '/legal/refund-policy'
+    | '/legal/terms-and-conditions'
+    | '/portfolio/$category'
+    | '/pov/$category'
+    | '/referrals/$category'
+    | '/heena/'
+    | '/portfolio/'
+    | '/pov/'
+    | '/referrals/'
+    | '/heena/admin/$'
+    | '/heena/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/$code'
+    | '/about'
+    | '/contact'
+    | '/fund-rahul'
+    | '/site-map'
+    | '/legal/cancellation-policy'
+    | '/legal/disclaimer'
+    | '/legal/privacy-policy'
+    | '/legal/refund-policy'
+    | '/legal/terms-and-conditions'
+    | '/portfolio/$category'
+    | '/pov/$category'
+    | '/referrals/$category'
+    | '/heena'
+    | '/portfolio'
+    | '/pov'
+    | '/referrals'
+    | '/heena/admin/$'
+    | '/heena/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/$code'
+    | '/about'
+    | '/contact'
+    | '/fund-rahul'
+    | '/site-map'
+    | '/legal/cancellation-policy'
+    | '/legal/disclaimer'
+    | '/legal/privacy-policy'
+    | '/legal/refund-policy'
+    | '/legal/terms-and-conditions'
+    | '/portfolio/$category'
+    | '/pov/$category'
+    | '/referrals/$category'
+    | '/heena/'
+    | '/portfolio/'
+    | '/pov/'
+    | '/referrals/'
+    | '/heena/admin/$'
+    | '/heena/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CodeRoute: typeof CodeRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  FundRahulRoute: typeof FundRahulRoute
+  SiteMapRoute: typeof SiteMapRoute
+  LegalCancellationPolicyRoute: typeof LegalCancellationPolicyRoute
+  LegalDisclaimerRoute: typeof LegalDisclaimerRoute
+  LegalPrivacyPolicyRoute: typeof LegalPrivacyPolicyRoute
+  LegalRefundPolicyRoute: typeof LegalRefundPolicyRoute
+  LegalTermsAndConditionsRoute: typeof LegalTermsAndConditionsRoute
+  PortfolioCategoryRoute: typeof PortfolioCategoryRoute
+  PovCategoryRoute: typeof PovCategoryRoute
+  ReferralsCategoryRoute: typeof ReferralsCategoryRoute
+  HeenaIndexRoute: typeof HeenaIndexRoute
+  PortfolioIndexRoute: typeof PortfolioIndexRoute
+  PovIndexRoute: typeof PovIndexRoute
+  ReferralsIndexRoute: typeof ReferralsIndexRoute
+  HeenaAdminSplatRoute: typeof HeenaAdminSplatRoute
+  HeenaAdminIndexRoute: typeof HeenaAdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +299,163 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$code': {
+      id: '/$code'
+      path: '/$code'
+      fullPath: '/$code'
+      preLoaderRoute: typeof CodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fund-rahul': {
+      id: '/fund-rahul'
+      path: '/fund-rahul'
+      fullPath: '/fund-rahul'
+      preLoaderRoute: typeof FundRahulRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/site-map': {
+      id: '/site-map'
+      path: '/site-map'
+      fullPath: '/site-map'
+      preLoaderRoute: typeof SiteMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heena/': {
+      id: '/heena/'
+      path: '/heena'
+      fullPath: '/heena/'
+      preLoaderRoute: typeof HeenaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/cancellation-policy': {
+      id: '/legal/cancellation-policy'
+      path: '/legal/cancellation-policy'
+      fullPath: '/legal/cancellation-policy'
+      preLoaderRoute: typeof LegalCancellationPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/disclaimer': {
+      id: '/legal/disclaimer'
+      path: '/legal/disclaimer'
+      fullPath: '/legal/disclaimer'
+      preLoaderRoute: typeof LegalDisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy-policy': {
+      id: '/legal/privacy-policy'
+      path: '/legal/privacy-policy'
+      fullPath: '/legal/privacy-policy'
+      preLoaderRoute: typeof LegalPrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/refund-policy': {
+      id: '/legal/refund-policy'
+      path: '/legal/refund-policy'
+      fullPath: '/legal/refund-policy'
+      preLoaderRoute: typeof LegalRefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/terms-and-conditions': {
+      id: '/legal/terms-and-conditions'
+      path: '/legal/terms-and-conditions'
+      fullPath: '/legal/terms-and-conditions'
+      preLoaderRoute: typeof LegalTermsAndConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio/': {
+      id: '/portfolio/'
+      path: '/portfolio'
+      fullPath: '/portfolio/'
+      preLoaderRoute: typeof PortfolioIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio/$category': {
+      id: '/portfolio/$category'
+      path: '/portfolio/$category'
+      fullPath: '/portfolio/$category'
+      preLoaderRoute: typeof PortfolioCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pov/': {
+      id: '/pov/'
+      path: '/pov'
+      fullPath: '/pov/'
+      preLoaderRoute: typeof PovIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pov/$category': {
+      id: '/pov/$category'
+      path: '/pov/$category'
+      fullPath: '/pov/$category'
+      preLoaderRoute: typeof PovCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/referrals/': {
+      id: '/referrals/'
+      path: '/referrals'
+      fullPath: '/referrals/'
+      preLoaderRoute: typeof ReferralsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/referrals/$category': {
+      id: '/referrals/$category'
+      path: '/referrals/$category'
+      fullPath: '/referrals/$category'
+      preLoaderRoute: typeof ReferralsCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heena/admin/': {
+      id: '/heena/admin/'
+      path: '/heena/admin'
+      fullPath: '/heena/admin/'
+      preLoaderRoute: typeof HeenaAdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heena/admin/$': {
+      id: '/heena/admin/$'
+      path: '/heena/admin/$'
+      fullPath: '/heena/admin/$'
+      preLoaderRoute: typeof HeenaAdminSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CodeRoute: CodeRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  FundRahulRoute: FundRahulRoute,
+  SiteMapRoute: SiteMapRoute,
+  LegalCancellationPolicyRoute: LegalCancellationPolicyRoute,
+  LegalDisclaimerRoute: LegalDisclaimerRoute,
+  LegalPrivacyPolicyRoute: LegalPrivacyPolicyRoute,
+  LegalRefundPolicyRoute: LegalRefundPolicyRoute,
+  LegalTermsAndConditionsRoute: LegalTermsAndConditionsRoute,
+  PortfolioCategoryRoute: PortfolioCategoryRoute,
+  PovCategoryRoute: PovCategoryRoute,
+  ReferralsCategoryRoute: ReferralsCategoryRoute,
+  HeenaIndexRoute: HeenaIndexRoute,
+  PortfolioIndexRoute: PortfolioIndexRoute,
+  PovIndexRoute: PovIndexRoute,
+  ReferralsIndexRoute: ReferralsIndexRoute,
+  HeenaAdminSplatRoute: HeenaAdminSplatRoute,
+  HeenaAdminIndexRoute: HeenaAdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
