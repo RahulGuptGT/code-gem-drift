@@ -4,7 +4,7 @@ import { collectFingerprint } from '@/lib/analytics/fingerprint';
 import { startBehaviorTracking } from '@/lib/analytics/behaviorTracker';
 import { startFormCapture } from '@/lib/analytics/formCapture';
 
-const SUPABASE_URL = "https://ehbungchpezbznxyfqic.supabase.co";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const TRACK_ENDPOINT = `${SUPABASE_URL}/functions/v1/track-analytics`;
 
 // Generate a persistent visitor ID
