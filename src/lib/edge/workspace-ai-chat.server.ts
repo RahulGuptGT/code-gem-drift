@@ -2807,7 +2807,7 @@ export async function handler(req: Request): Promise<Response> {
             await userClient.from("workspace_ai_threads").update({ updated_at: new Date().toISOString(), last_message_at: new Date().toISOString() }).eq("id", threadId);
 
             // Topic-based auto title, refined over the first few turns.
-            const autoTitle = await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId, enq);
+            const autoTitle = await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId as string, enq);
             if (autoTitle) threadTitle = autoTitle;
 
             enq({ type: "done", assistantMessageId });
@@ -2909,7 +2909,7 @@ export async function handler(req: Request): Promise<Response> {
 
           if (stoppedForApproval) {
             await userClient.from("workspace_ai_threads").update({ updated_at: new Date().toISOString(), last_message_at: new Date().toISOString() }).eq("id", threadId);
-            await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId, enq);
+            await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId as string, enq);
             enq({ type: "done", assistantMessageId: null });
             controller.close();
             return;
@@ -2927,7 +2927,7 @@ export async function handler(req: Request): Promise<Response> {
         enq({ type: "delta", text: stepNote });
         await logHealth({ source: "notepad-chat.loop", event_type: "max_steps_reached", severity: "warn", user_id: userId, thread_id: threadId, agent });
         enq({ type: "usage", usage: { ...usageTotals } });
-        await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId, enq);
+        await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId as string, enq);
         enq({ type: "done", assistantMessageId: (noteSaved as any)?.id || null });
 
         controller.close();
