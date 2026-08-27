@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  ClientOnly,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -135,8 +136,12 @@ function RootComponent() {
             <AuthProvider>
               <Toaster />
               <Sonner />
-              <AnalyticsTracker />
-              <RouteLoader />
+              <ClientOnly fallback={null}>
+                <AnalyticsTracker />
+              </ClientOnly>
+              <ClientOnly fallback={null}>
+                <RouteLoader />
+              </ClientOnly>
               <ErrorBoundary>
                 {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
                 <Outlet />
