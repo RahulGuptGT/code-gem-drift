@@ -2612,7 +2612,7 @@ export async function handler(req: Request): Promise<Response> {
 
   // 3) Build context block (current note + mentions only for the Notes agent).
   let contextBlock = "";
-  if (agent === "notes" && body.currentNoteId) {
+  if ((agent as string) === "notes" && body.currentNoteId) {
     const { data: note } = await userClient.from("workspace_notes").select("id, title, content").eq("id", body.currentNoteId).maybeSingle();
     if (note) {
       const content = String((note as any).content || "").slice(0, 6000);
@@ -2623,7 +2623,7 @@ export async function handler(req: Request): Promise<Response> {
     contextBlock += `\n\nSELECTED TEXT:\n"""\n${body.selectedText.slice(0, 2000)}\n"""`;
   }
 
-  if (agent === "notes" && mentionedNoteIds.length > 0) {
+  if ((agent as string) === "notes" && mentionedNoteIds.length > 0) {
     const { data: mNotes } = await userClient
       .from("workspace_notes")
       .select("id, title, content")
@@ -2685,7 +2685,7 @@ export async function handler(req: Request): Promise<Response> {
   // 4) Pre-emptive RAG retrieval (Notes agent only — DK agent uses its own tools).
   let sourcesEvent: { noteId: string; title: string }[] = [];
   let sourcesBlock = "";
-  if (agent === "notes" && !isApproval && body.message) {
+  if ((agent as string) === "notes" && !isApproval && body.message) {
     const vec = await embedQuery(LOVABLE_API_KEY, body.message);
     if (vec) {
       const { data } = await userClient.rpc("match_note_chunks", { query_embedding: vec as any, match_count: 8 });
@@ -2807,7 +2807,7 @@ export async function handler(req: Request): Promise<Response> {
             await userClient.from("workspace_ai_threads").update({ updated_at: new Date().toISOString(), last_message_at: new Date().toISOString() }).eq("id", threadId);
 
             // Topic-based auto title, refined over the first few turns.
-            const autoTitle = await maybeAutoTitleThread(userClient, LOVABLE_API_KEY, threadId, enq);
+            const autoTitle = await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId, enq);
             if (autoTitle) threadTitle = autoTitle;
 
             enq({ type: "done", assistantMessageId });
@@ -2909,7 +2909,7 @@ export async function handler(req: Request): Promise<Response> {
 
           if (stoppedForApproval) {
             await userClient.from("workspace_ai_threads").update({ updated_at: new Date().toISOString(), last_message_at: new Date().toISOString() }).eq("id", threadId);
-            await maybeAutoTitleThread(userClient, LOVABLE_API_KEY, threadId, enq);
+            await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId, enq);
             enq({ type: "done", assistantMessageId: null });
             controller.close();
             return;
@@ -2927,7 +2927,7 @@ export async function handler(req: Request): Promise<Response> {
         enq({ type: "delta", text: stepNote });
         await logHealth({ source: "notepad-chat.loop", event_type: "max_steps_reached", severity: "warn", user_id: userId, thread_id: threadId, agent });
         enq({ type: "usage", usage: { ...usageTotals } });
-        await maybeAutoTitleThread(userClient, LOVABLE_API_KEY, threadId, enq);
+        await maybeAutoTitleThread(userClient, LOVABLE_API_KEY as string, threadId, enq);
         enq({ type: "done", assistantMessageId: (noteSaved as any)?.id || null });
 
         controller.close();
