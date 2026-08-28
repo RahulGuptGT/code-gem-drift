@@ -41,6 +41,7 @@ import { Route as ApiPublicTranscribeAudioRouteImport } from './routes/api/publi
 import { Route as ApiPublicWorkspaceAiChatRouteImport } from './routes/api/public/workspace-ai-chat'
 import { Route as HeenaAdminIndexRouteImport } from './routes/heena/admin.index'
 import { Route as HeenaAdminSplatRouteImport } from './routes/heena/admin.$'
+import { Route as ApiPublicFileSplatRouteImport } from './routes/api/public/file/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -209,6 +210,11 @@ const HeenaAdminSplatRoute = HeenaAdminSplatRouteImport.update({
   path: '/heena/admin/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicFileSplatRoute = ApiPublicFileSplatRouteImport.update({
+  id: '/api/public/file/$',
+  path: '/api/public/file/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -243,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
+  '/api/public/file/$': typeof ApiPublicFileSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin': typeof HeenaAdminIndexRoute
+  '/api/public/file/$': typeof ApiPublicFileSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -312,6 +320,7 @@ export interface FileRoutesById {
   '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
+  '/api/public/file/$': typeof ApiPublicFileSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -348,6 +357,7 @@ export interface FileRouteTypes {
     | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin/'
+    | '/api/public/file/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -382,6 +392,7 @@ export interface FileRouteTypes {
     | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin'
+    | '/api/public/file/$'
   id:
     | '__root__'
     | '/'
@@ -416,6 +427,7 @@ export interface FileRouteTypes {
     | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin/'
+    | '/api/public/file/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -451,6 +463,7 @@ export interface RootRouteChildren {
   ApiPublicWorkspaceAiChatRoute: typeof ApiPublicWorkspaceAiChatRoute
   HeenaAdminSplatRoute: typeof HeenaAdminSplatRoute
   HeenaAdminIndexRoute: typeof HeenaAdminIndexRoute
+  ApiPublicFileSplatRoute: typeof ApiPublicFileSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -679,6 +692,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HeenaAdminSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/file/$': {
+      id: '/api/public/file/$'
+      path: '/api/public/file/$'
+      fullPath: '/api/public/file/$'
+      preLoaderRoute: typeof ApiPublicFileSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -715,6 +735,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicWorkspaceAiChatRoute: ApiPublicWorkspaceAiChatRoute,
   HeenaAdminSplatRoute: HeenaAdminSplatRoute,
   HeenaAdminIndexRoute: HeenaAdminIndexRoute,
+  ApiPublicFileSplatRoute: ApiPublicFileSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
