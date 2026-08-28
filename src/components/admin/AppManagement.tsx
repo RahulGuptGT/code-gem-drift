@@ -83,8 +83,12 @@ export default function AppManagement() {
 
       if (error) throw error;
 
-      const { data: urlData } = supabase.storage.from('app-files').getPublicUrl(data.path);
-      return urlData.publicUrl;
+      // Buckets are private; serve through the site's public file proxy.
+      return `/api/public/file/app-files/${data.path
+        .split('/')
+        .map(encodeURIComponent)
+        .join('/')}`;
+
     } catch (err: any) {
       toast.error(err.message || 'Failed to upload file');
       return null;
