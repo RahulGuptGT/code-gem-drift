@@ -88,22 +88,43 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Rahul Gupta — Student, Creator & Thinker from Bihar" },
+      {
+        name: "description",
+        content:
+          "Personal site of Rahul Gupta — student tools, Class 12 prep, Class 10 results, referral offers, and POVs from Bihar, India.",
+      },
+      { name: "author", content: "Rahul Gupta" },
+      {
+        property: "og:title",
+        content: "Rahul Gupta — Student, Creator & Thinker from Bihar",
+      },
+      {
+        property: "og:description",
+        content:
+          "Student tools, Class 12 prep, referral offers, and POVs from Bihar.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Great+Vibes&display=swap",
+      },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
+
   }),
   shellComponent: RootShell,
   component: RootComponent,
