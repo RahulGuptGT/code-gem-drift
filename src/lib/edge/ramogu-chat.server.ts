@@ -365,13 +365,13 @@ async function fetchRealtimeData(query: string, supabase: any): Promise<string> 
       }
     }
 
-    // Check for payment/UPI related queries (general payments table)
+    // Check for payment/UPI related queries (donations table)
     const paymentKeywords = ['upi', 'pay', 'payment history', 'transaction', 'ट्रांजैक्शन'];
     const hasPaymentQuery = paymentKeywords.some(k => queryLower.includes(k)) && !hasSubscriptionQuery;
 
     if (hasPaymentQuery) {
       const { data: payments, error } = await supabase
-        .from("payments")
+        .from("donations")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
