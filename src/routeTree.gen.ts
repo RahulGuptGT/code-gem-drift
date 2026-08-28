@@ -38,7 +38,6 @@ import { Route as ApiPublicSmartIndexSiteRouteImport } from './routes/api/public
 import { Route as ApiPublicTrackAnalyticsRouteImport } from './routes/api/public/track-analytics'
 import { Route as ApiPublicTrackUrlClickRouteImport } from './routes/api/public/track-url-click'
 import { Route as ApiPublicTranscribeAudioRouteImport } from './routes/api/public/transcribe-audio'
-import { Route as ApiPublicWorkspaceAiChatRouteImport } from './routes/api/public/workspace-ai-chat'
 import { Route as HeenaAdminIndexRouteImport } from './routes/heena/admin.index'
 import { Route as HeenaAdminSplatRouteImport } from './routes/heena/admin.$'
 import { Route as ApiPublicFileSplatRouteImport } from './routes/api/public/file/$'
@@ -194,12 +193,6 @@ const ApiPublicTranscribeAudioRoute =
     path: '/api/public/transcribe-audio',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicWorkspaceAiChatRoute =
-  ApiPublicWorkspaceAiChatRouteImport.update({
-    id: '/api/public/workspace-ai-chat',
-    path: '/api/public/workspace-ai-chat',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const HeenaAdminIndexRoute = HeenaAdminIndexRouteImport.update({
   id: '/heena/admin/',
   path: '/heena/admin/',
@@ -246,7 +239,6 @@ export interface FileRoutesByFullPath {
   '/api/public/track-analytics': typeof ApiPublicTrackAnalyticsRoute
   '/api/public/track-url-click': typeof ApiPublicTrackUrlClickRoute
   '/api/public/transcribe-audio': typeof ApiPublicTranscribeAudioRoute
-  '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
   '/api/public/file/$': typeof ApiPublicFileSplatRoute
@@ -281,7 +273,6 @@ export interface FileRoutesByTo {
   '/api/public/track-analytics': typeof ApiPublicTrackAnalyticsRoute
   '/api/public/track-url-click': typeof ApiPublicTrackUrlClickRoute
   '/api/public/transcribe-audio': typeof ApiPublicTranscribeAudioRoute
-  '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin': typeof HeenaAdminIndexRoute
   '/api/public/file/$': typeof ApiPublicFileSplatRoute
@@ -317,7 +308,6 @@ export interface FileRoutesById {
   '/api/public/track-analytics': typeof ApiPublicTrackAnalyticsRoute
   '/api/public/track-url-click': typeof ApiPublicTrackUrlClickRoute
   '/api/public/transcribe-audio': typeof ApiPublicTranscribeAudioRoute
-  '/api/public/workspace-ai-chat': typeof ApiPublicWorkspaceAiChatRoute
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
   '/api/public/file/$': typeof ApiPublicFileSplatRoute
@@ -354,7 +344,6 @@ export interface FileRouteTypes {
     | '/api/public/track-analytics'
     | '/api/public/track-url-click'
     | '/api/public/transcribe-audio'
-    | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin/'
     | '/api/public/file/$'
@@ -389,7 +378,6 @@ export interface FileRouteTypes {
     | '/api/public/track-analytics'
     | '/api/public/track-url-click'
     | '/api/public/transcribe-audio'
-    | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin'
     | '/api/public/file/$'
@@ -424,7 +412,6 @@ export interface FileRouteTypes {
     | '/api/public/track-analytics'
     | '/api/public/track-url-click'
     | '/api/public/transcribe-audio'
-    | '/api/public/workspace-ai-chat'
     | '/heena/admin/$'
     | '/heena/admin/'
     | '/api/public/file/$'
@@ -460,7 +447,6 @@ export interface RootRouteChildren {
   ApiPublicTrackAnalyticsRoute: typeof ApiPublicTrackAnalyticsRoute
   ApiPublicTrackUrlClickRoute: typeof ApiPublicTrackUrlClickRoute
   ApiPublicTranscribeAudioRoute: typeof ApiPublicTranscribeAudioRoute
-  ApiPublicWorkspaceAiChatRoute: typeof ApiPublicWorkspaceAiChatRoute
   HeenaAdminSplatRoute: typeof HeenaAdminSplatRoute
   HeenaAdminIndexRoute: typeof HeenaAdminIndexRoute
   ApiPublicFileSplatRoute: typeof ApiPublicFileSplatRoute
@@ -671,13 +657,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTranscribeAudioRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/workspace-ai-chat': {
-      id: '/api/public/workspace-ai-chat'
-      path: '/api/public/workspace-ai-chat'
-      fullPath: '/api/public/workspace-ai-chat'
-      preLoaderRoute: typeof ApiPublicWorkspaceAiChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/heena/admin/': {
       id: '/heena/admin/'
       path: '/heena/admin'
@@ -732,7 +711,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicTrackAnalyticsRoute: ApiPublicTrackAnalyticsRoute,
   ApiPublicTrackUrlClickRoute: ApiPublicTrackUrlClickRoute,
   ApiPublicTranscribeAudioRoute: ApiPublicTranscribeAudioRoute,
-  ApiPublicWorkspaceAiChatRoute: ApiPublicWorkspaceAiChatRoute,
   HeenaAdminSplatRoute: HeenaAdminSplatRoute,
   HeenaAdminIndexRoute: HeenaAdminIndexRoute,
   ApiPublicFileSplatRoute: ApiPublicFileSplatRoute,
