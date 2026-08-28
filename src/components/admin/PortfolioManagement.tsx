@@ -98,11 +98,14 @@ const PortfolioManagement = () => {
 
       if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('portfolio-images')
-        .getPublicUrl(filePath);
+      // Buckets are private; serve through the site's public file proxy.
+      const publicUrl = `/api/public/file/portfolio-images/${filePath
+        .split('/')
+        .map(encodeURIComponent)
+        .join('/')}`;
 
       setFormData({ ...formData, image_url: publicUrl });
+
       toast.success('Image uploaded successfully');
     } catch (error) {
       toast.error('Error uploading image');
