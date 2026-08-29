@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CodeRouteImport } from './routes/$code'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FundRahulRouteImport } from './routes/fund-rahul'
 import { Route as SiteMapRouteImport } from './routes/site-map'
+import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as HeenaIndexRouteImport } from './routes/heena/index'
 import { Route as LegalCancellationPolicyRouteImport } from './routes/legal/cancellation-policy'
 import { Route as LegalDisclaimerRouteImport } from './routes/legal/disclaimer'
@@ -57,6 +59,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -71,6 +78,11 @@ const SiteMapRoute = SiteMapRouteImport.update({
   id: '/site-map',
   path: '/site-map',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppSplatRoute = AppSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => AppRoute,
 } as any)
 const HeenaIndexRoute = HeenaIndexRouteImport.update({
   id: '/heena/',
@@ -213,9 +225,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$code': typeof CodeRoute
   '/about': typeof AboutRoute
+  '/app': typeof AppRouteWithChildren
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
   '/site-map': typeof SiteMapRoute
+  '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
   '/legal/privacy-policy': typeof LegalPrivacyPolicyRoute
@@ -247,9 +261,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$code': typeof CodeRoute
   '/about': typeof AboutRoute
+  '/app': typeof AppRouteWithChildren
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
   '/site-map': typeof SiteMapRoute
+  '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
   '/legal/privacy-policy': typeof LegalPrivacyPolicyRoute
@@ -282,9 +298,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$code': typeof CodeRoute
   '/about': typeof AboutRoute
+  '/app': typeof AppRouteWithChildren
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
   '/site-map': typeof SiteMapRoute
+  '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
   '/legal/privacy-policy': typeof LegalPrivacyPolicyRoute
@@ -318,9 +336,11 @@ export interface FileRouteTypes {
     | '/'
     | '/$code'
     | '/about'
+    | '/app'
     | '/contact'
     | '/fund-rahul'
     | '/site-map'
+    | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
     | '/legal/privacy-policy'
@@ -352,9 +372,11 @@ export interface FileRouteTypes {
     | '/'
     | '/$code'
     | '/about'
+    | '/app'
     | '/contact'
     | '/fund-rahul'
     | '/site-map'
+    | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
     | '/legal/privacy-policy'
@@ -386,9 +408,11 @@ export interface FileRouteTypes {
     | '/'
     | '/$code'
     | '/about'
+    | '/app'
     | '/contact'
     | '/fund-rahul'
     | '/site-map'
+    | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
     | '/legal/privacy-policy'
@@ -421,6 +445,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CodeRoute: typeof CodeRoute
   AboutRoute: typeof AboutRoute
+  AppRoute: typeof AppRouteWithChildren
   ContactRoute: typeof ContactRoute
   FundRahulRoute: typeof FundRahulRoute
   SiteMapRoute: typeof SiteMapRoute
@@ -475,6 +500,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -495,6 +527,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/site-map'
       preLoaderRoute: typeof SiteMapRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/app/$': {
+      id: '/app/$'
+      path: '/$'
+      fullPath: '/app/$'
+      preLoaderRoute: typeof AppSplatRouteImport
+      parentRoute: typeof AppRoute
     }
     '/heena/': {
       id: '/heena/'
@@ -681,10 +720,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppRouteChildren {
+  AppSplatRoute: typeof AppSplatRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppSplatRoute: AppSplatRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CodeRoute: CodeRoute,
   AboutRoute: AboutRoute,
+  AppRoute: AppRouteWithChildren,
   ContactRoute: ContactRoute,
   FundRahulRoute: FundRahulRoute,
   SiteMapRoute: SiteMapRoute,
