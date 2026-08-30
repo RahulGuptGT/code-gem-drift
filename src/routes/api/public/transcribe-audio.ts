@@ -5,7 +5,11 @@ export const Route = createFileRoute("/api/public/transcribe-audio")({
     handlers: {
       OPTIONS: async ({ request }) => (await import("@/lib/edge/transcribe-audio.server")).handler(request),
       POST: async ({ request }) => (await import("@/lib/edge/transcribe-audio.server")).handler(request),
-      GET: async ({ request }) => (await import("@/lib/edge/transcribe-audio.server")).handler(request),
+      GET: async () =>
+        new Response(JSON.stringify({ error: "Method not allowed" }), {
+          status: 405,
+          headers: { "content-type": "application/json", allow: "POST, OPTIONS" },
+        }),
     },
   },
 });
