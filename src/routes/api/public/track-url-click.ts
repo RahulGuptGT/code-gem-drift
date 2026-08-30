@@ -5,7 +5,11 @@ export const Route = createFileRoute("/api/public/track-url-click")({
     handlers: {
       OPTIONS: async ({ request }) => (await import("@/lib/edge/track-url-click.server")).handler(request),
       POST: async ({ request }) => (await import("@/lib/edge/track-url-click.server")).handler(request),
-      GET: async ({ request }) => (await import("@/lib/edge/track-url-click.server")).handler(request),
+      GET: async () =>
+        new Response(JSON.stringify({ error: "Method not allowed" }), {
+          status: 405,
+          headers: { "content-type": "application/json", allow: "POST, OPTIONS" },
+        }),
     },
   },
 });
