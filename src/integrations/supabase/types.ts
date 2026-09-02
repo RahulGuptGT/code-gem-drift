@@ -578,6 +578,98 @@ export type Database = {
         }
         Relationships: []
       }
+      book_chapters: {
+        Row: {
+          book_id: string
+          chapter_number: number
+          content: string
+          created_at: string
+          excerpt: string | null
+          id: string
+          is_published: boolean
+          min_tier: string
+          reading_minutes: number | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          book_id: string
+          chapter_number?: number
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean
+          min_tier?: string
+          reading_minutes?: number | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          book_id?: string
+          chapter_number?: number
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_published?: boolean
+          min_tier?: string
+          reading_minutes?: number | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_chapters_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      books: {
+        Row: {
+          author_name: string
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean
+          slug: string
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          slug: string
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          slug?: string
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_feedback: {
         Row: {
           created_at: string
@@ -754,6 +846,50 @@ export type Database = {
         }
         Relationships: []
       }
+      memberships: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          plan_slug: string
+          source: string
+          started_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan_slug: string
+          source?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan_slug?: string
+          source?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_plan_slug_fkey"
+            columns: ["plan_slug"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       personal_login_events: {
         Row: {
           browser: string | null
@@ -799,6 +935,108 @@ export type Database = {
           session_fingerprint?: string | null
           user_agent?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      plan_payments: {
+        Row: {
+          amount: number
+          buyer_email: string | null
+          buyer_name: string | null
+          created_at: string
+          currency: string
+          id: string
+          plan_slug: string
+          provider: string
+          provider_payment_id: string | null
+          provider_request_id: string | null
+          raw_payload: Json | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          buyer_email?: string | null
+          buyer_name?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          plan_slug: string
+          provider?: string
+          provider_payment_id?: string | null
+          provider_request_id?: string | null
+          raw_payload?: Json | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          buyer_email?: string | null
+          buyer_name?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          plan_slug?: string
+          provider?: string
+          provider_payment_id?: string | null
+          provider_request_id?: string | null
+          raw_payload?: Json | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      plans: {
+        Row: {
+          billing_period: string
+          created_at: string
+          description: string | null
+          display_order: number
+          duration_days: number | null
+          features: Json
+          id: string
+          is_highlighted: boolean
+          is_visible: boolean
+          name: string
+          price_inr: number
+          slug: string
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          billing_period?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_days?: number | null
+          features?: Json
+          id?: string
+          is_highlighted?: boolean
+          is_visible?: boolean
+          name: string
+          price_inr?: number
+          slug: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          billing_period?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_days?: number | null
+          features?: Json
+          id?: string
+          is_highlighted?: boolean
+          is_visible?: boolean
+          name?: string
+          price_inr?: number
+          slug?: string
+          tagline?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -914,11 +1152,13 @@ export type Database = {
           created_at: string
           disagree_count: number
           display_order: number
+          excerpt: string | null
           id: string
           is_featured: boolean
           is_hot_take: boolean
           is_visible: boolean
           language: string
+          min_tier: string
           post_type: string
           title: string
           updated_at: string
@@ -932,11 +1172,13 @@ export type Database = {
           created_at?: string
           disagree_count?: number
           display_order?: number
+          excerpt?: string | null
           id?: string
           is_featured?: boolean
           is_hot_take?: boolean
           is_visible?: boolean
           language?: string
+          min_tier?: string
           post_type?: string
           title: string
           updated_at?: string
@@ -950,11 +1192,13 @@ export type Database = {
           created_at?: string
           disagree_count?: number
           display_order?: number
+          excerpt?: string | null
           id?: string
           is_featured?: boolean
           is_hot_take?: boolean
           is_visible?: boolean
           language?: string
+          min_tier?: string
           post_type?: string
           title?: string
           updated_at?: string
@@ -990,6 +1234,41 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      reading_progress: {
+        Row: {
+          chapter_id: string
+          completed: boolean
+          id: string
+          last_read_at: string
+          progress_percent: number
+          user_id: string
+        }
+        Insert: {
+          chapter_id: string
+          completed?: boolean
+          id?: string
+          last_read_at?: string
+          progress_percent?: number
+          user_id: string
+        }
+        Update: {
+          chapter_id?: string
+          completed?: boolean
+          id?: string
+          last_read_at?: string
+          progress_percent?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reading_progress_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "book_chapters"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       referral_links: {
         Row: {
@@ -1320,6 +1599,8 @@ export type Database = {
         Args: { _post_id: string; _reaction_type: string; _visitor_id: string }
         Returns: undefined
       }
+      tier_rank: { Args: { _tier: string }; Returns: number }
+      user_tier: { Args: { _user_id: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
