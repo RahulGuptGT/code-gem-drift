@@ -16,6 +16,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FundRahulRouteImport } from './routes/fund-rahul'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SiteMapRouteImport } from './routes/site-map'
 import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as HeenaIndexRouteImport } from './routes/heena/index'
@@ -78,6 +79,11 @@ const ContactRoute = ContactRouteImport.update({
 const FundRahulRoute = FundRahulRouteImport.update({
   id: '/fund-rahul',
   path: '/fund-rahul',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SiteMapRoute = SiteMapRouteImport.update({
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
@@ -272,6 +279,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
@@ -310,6 +318,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
@@ -349,6 +358,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/fund-rahul'
+    | '/reset-password'
     | '/site-map'
     | '/app/$'
     | '/legal/cancellation-policy'
@@ -386,6 +396,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/fund-rahul'
+    | '/reset-password'
     | '/site-map'
     | '/app/$'
     | '/legal/cancellation-policy'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/fund-rahul'
+    | '/reset-password'
     | '/site-map'
     | '/app/$'
     | '/legal/cancellation-policy'
@@ -461,6 +473,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   FundRahulRoute: typeof FundRahulRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SiteMapRoute: typeof SiteMapRoute
   LegalCancellationPolicyRoute: typeof LegalCancellationPolicyRoute
   LegalDisclaimerRoute: typeof LegalDisclaimerRoute
@@ -539,6 +552,13 @@ declare module '@tanstack/react-router' {
       path: '/fund-rahul'
       fullPath: '/fund-rahul'
       preLoaderRoute: typeof FundRahulRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/site-map': {
@@ -758,6 +778,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   FundRahulRoute: FundRahulRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SiteMapRoute: SiteMapRoute,
   LegalCancellationPolicyRoute: LegalCancellationPolicyRoute,
   LegalDisclaimerRoute: LegalDisclaimerRoute,
