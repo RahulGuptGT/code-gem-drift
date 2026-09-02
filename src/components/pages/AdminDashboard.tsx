@@ -94,9 +94,14 @@ export default function AdminDashboard() {
   }
 
   if (!isAdmin) {
-    const redirectParam = encodeURIComponent(location.pathname + location.search);
-    return <Navigate to={`/heena?redirect=${redirectParam}`} replace />;
+    // Only admin paths are worth preserving; never re-encode an existing
+    // ?redirect= value, otherwise the URL nests infinitely.
+    const target = location.pathname.startsWith('/heena/admin')
+      ? location.pathname + location.search
+      : '/heena/admin';
+    return <Navigate to={`/heena?redirect=${encodeURIComponent(target)}`} replace />;
   }
+
 
   const renderContent = () => {
     switch (activeSection) {
