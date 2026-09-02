@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Database, Clock, FileText, AlertCircle, CheckCircle, Zap, Globe } from "lucide-react";import { toast } from "sonner";
 import { UniversalSpinner } from "@/components/ui/UniversalLoader";
+import { uniqueChannel } from "@/lib/realtime";
 
 interface IndexingStatus {
   last_indexed_at: string | null;
@@ -66,7 +67,7 @@ const ChatbotIndexingPanel = () => {
 
     // Subscribe to real-time updates
     const channel = supabase
-      .channel("indexing-status-changes")
+      .channel(uniqueChannel("indexing-status-changes"))
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "site_indexing_status" },

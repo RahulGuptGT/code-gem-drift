@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import ChatbotIndexingPanel from "./ChatbotIndexingPanel";
 import ChatbotQueryAnalytics from "./ChatbotQueryAnalytics";
 import { UniversalLoader } from "@/components/ui/UniversalLoader";
+import { uniqueChannel } from "@/lib/realtime";
 
 interface ChatSession {
   id: string;
@@ -144,7 +145,7 @@ const SupportChatManagement = () => {
 
     // Subscribe to real-time updates
     const channel = supabase
-      .channel("chat-sessions-changes")
+      .channel(uniqueChannel("chat-sessions-changes"))
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "chat_sessions" },
