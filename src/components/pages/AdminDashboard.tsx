@@ -112,7 +112,7 @@ export default function AdminDashboard() {
       case 'support-chat': return <SupportChatManagement />;
       case 'chatbot-settings': return <ChatbotSettings />;
       case 'settings': return <SiteSettingsManagement />;
-      default: return <DashboardOverview />;
+      default: return <AdminSectionNotFound />;
     }
   };
 
