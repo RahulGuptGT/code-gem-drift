@@ -29,6 +29,7 @@ export const ROUTES = {
     ROOT: '/heena/admin',
     ANALYTICS: '/heena/admin/analytics',
     ANALYTICS_TAB: '/heena/admin/analytics/:tab',
+    VISITOR_PROFILES: '/heena/admin/visitor-profiles',
     CONTACTS: '/heena/admin/contacts',
     PORTFOLIO: '/heena/admin/portfolio',
     REFERRALS: '/heena/admin/referrals',

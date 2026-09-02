@@ -50,15 +50,32 @@ const sectionToPublicUrl: Record<string, string | null> = {
 };
 
 function getActiveSection(pathname: string): string {
-  if (pathToSection[pathname]) return pathToSection[pathname];
+  const normalized = pathname.replace(/\/+$/, '') || '/';
+  if (pathToSection[normalized]) return pathToSection[normalized];
   // Match prefixes for nested tab routes (e.g. /heena/admin/analytics/traffic)
   const sorted = Object.keys(pathToSection).sort((a, b) => b.length - a.length);
   for (const p of sorted) {
-    if (p !== '/heena/admin' && (pathname === p || pathname.startsWith(p + '/'))) {
+    if (p !== '/heena/admin' && (normalized === p || normalized.startsWith(p + '/'))) {
       return pathToSection[p];
     }
   }
-  return 'dashboard';
+  return 'not-found';
+}
+
+function AdminSectionNotFound() {
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <div className="max-w-md rounded-xl border bg-card p-8 text-center shadow-sm">
+        <h1 className="text-2xl font-bold">Ye admin page maujood nahi</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Is URL par koi admin section nahi hai. Sidebar se koi section chuno ya dashboard par wapas jao.
+        </p>
+        <Button asChild className="mt-6">
+          <Link to="/heena/admin">Back to Dashboard</Link>
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 export default function AdminDashboard() {
@@ -95,7 +112,7 @@ export default function AdminDashboard() {
       case 'support-chat': return <SupportChatManagement />;
       case 'chatbot-settings': return <ChatbotSettings />;
       case 'settings': return <SiteSettingsManagement />;
-      default: return <DashboardOverview />;
+      default: return <AdminSectionNotFound />;
     }
   };
 

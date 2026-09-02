@@ -12,12 +12,6 @@ import {
   LinkIcon,
   Smartphone,
   Brain,
-  Lock,
-  Clock,
-  BookOpen,
-  NotebookPen,
-  Users,
-  Sparkles,
   Eye
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -40,8 +34,6 @@ const navigationGroups: NavGroup[] = [
     label: 'OVERVIEW',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/heena/admin' },
-      { id: 'heena', label: 'Heena ✨ (DK)', icon: Sparkles, path: '/heena/admin/heena' },
-      { id: 'binod', label: 'Binod 🤖 (Admin)', icon: Bot, path: '/heena/admin/binod' },
       { id: 'analytics', label: 'Website Reach', icon: BarChart3, path: '/heena/admin/analytics' },
       { id: 'visitor-profiles', label: 'Visitor Profiles', icon: Eye, path: '/heena/admin/visitor-profiles' },
     ],
@@ -51,16 +43,6 @@ const navigationGroups: NavGroup[] = [
     items: [
       { id: 'portfolio', label: 'Portfolio', icon: Briefcase, path: '/heena/admin/portfolio' },
       { id: 'pov', label: 'Rahul POV', icon: Brain, path: '/heena/admin/pov' },
-    ],
-  },
-  {
-    label: 'PERSONAL',
-    items: [
-      { id: 'personal', label: 'Personal Hub', icon: Lock, path: '/heena/admin/personal' },
-      { id: 'personal-clock', label: 'Clock', icon: Clock, path: '/heena/admin/personal/clock' },
-      { id: 'personal-biography', label: 'Biography', icon: BookOpen, path: '/heena/admin/personal/biography' },
-      { id: 'personal-notepad', label: 'Notepad', icon: NotebookPen, path: '/heena/admin/personal/notepad' },
-      { id: 'personal-profile', label: 'People', icon: Users, path: '/heena/admin/personal/profile' },
     ],
   },
   {
