@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import SocialIcons from "@/components/SocialIcons";
 import { ArrowRight } from "lucide-react";
-import { Helmet } from "react-helmet";
 import { useScrollToHash } from "@/hooks/useScrollToHash";
 
 const About = () => {
@@ -22,15 +21,6 @@ const About = () => {
 
   return (
     <div className="min-h-screen py-16">
-      <Helmet>
-        <title>About Rahul Gupta — Student & Creator from Bihar</title>
-        <meta name="description" content="Meet Rahul Gupta — a Class 12 PCMB student from Bihar building study tools, POVs, and apps to make learning more accessible." />
-        <link rel="canonical" href="https://rahulgupta.site/about" />
-        <meta property="og:title" content="About Rahul Gupta" />
-        <meta property="og:description" content="Student & creator from Bihar building study tools and POVs." />
-        <meta property="og:url" content="https://rahulgupta.site/about" />
-        <script type="application/ld+json">{JSON.stringify(personJsonLd)}</script>
-      </Helmet>
       <div className="section-container">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

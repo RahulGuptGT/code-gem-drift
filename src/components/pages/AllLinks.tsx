@@ -8,7 +8,6 @@ import {
   ExternalLink, Gift, Smartphone, Map, Brain,
   Hash
 } from 'lucide-react';
-import { Helmet } from 'react-helmet';
 import { ROUTES, HASH_SECTIONS, buildRouteWithHash } from '@/config/routes';
 
 interface SiteLink {
@@ -60,10 +59,6 @@ const AllLinks = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Site Map | Rahul Gupta</title>
-        <meta name="description" content="Complete list of all pages and sections available on rahulgupta.site" />
-      </Helmet>
 
       <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">

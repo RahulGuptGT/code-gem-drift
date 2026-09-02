@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
@@ -73,10 +72,6 @@ export default function RahulPOV() {
 
   return (
     <>
-      <Helmet>
-        <title>Rahul POV – Unfiltered Thoughts & Public Discussion</title>
-        <meta name="description" content="No filters. No fake motivation. Just raw truth and real POV. Read, react, and challenge the thought." />
-      </Helmet>
 
       <div className="min-h-screen bg-background">
         <POVHero />

@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ExternalLink, Github, Briefcase, X } from 'lucide-react';
-import { Helmet } from 'react-helmet';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 
 interface PortfolioItem {
@@ -28,12 +27,29 @@ interface PortfolioItem {
 const PLATFORM_OPTIONS = ['Web', 'Android', 'iOS', 'Cross-platform', 'Desktop'];
 const STATUS_OPTIONS = ['Live', 'Beta', 'In Development', 'Archived'];
 
+/**
+ * URL slugs are plural (/portfolio/apps) while the stored category values are
+ * singular ('app'), so incoming slugs are normalised before filtering.
+ */
+const CATEGORY_SLUG_ALIASES: Record<string, string> = {
+  websites: 'website',
+  apps: 'app',
+  tools: 'tool',
+  others: 'other',
+};
+
+function normaliseCategory(slug?: string): string {
+  if (!slug) return 'all';
+  const lower = slug.toLowerCase();
+  return CATEGORY_SLUG_ALIASES[lower] ?? lower;
+}
+
 const Portfolio = () => {
   useScrollToHash();
   const { category: urlCategory } = useParams();
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<PortfolioItem[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState(urlCategory || 'all');
+  const [selectedCategory, setSelectedCategory] = useState(normaliseCategory(urlCategory));
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
@@ -49,9 +65,10 @@ const Portfolio = () => {
 
   useEffect(() => {
     if (urlCategory) {
-      setSelectedCategory(urlCategory);
+      setSelectedCategory(normaliseCategory(urlCategory));
     }
   }, [urlCategory]);
+
 
   useEffect(() => {
     fetchPortfolioItems();
@@ -91,14 +108,6 @@ const Portfolio = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Portfolio — Websites, Apps & Tools by Rahul Gupta</title>
-        <meta name="description" content="Browse Rahul Gupta's portfolio of websites, mobile apps, and tools — live projects, tech stacks, and links to source code." />
-        <link rel="canonical" href="https://rahulgupta.site/portfolio" />
-        <meta property="og:title" content="Portfolio — Rahul Gupta" />
-        <meta property="og:description" content="Websites, apps, and tools built by Rahul Gupta." />
-        <meta property="og:url" content="https://rahulgupta.site/portfolio" />
-      </Helmet>
 
       <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
