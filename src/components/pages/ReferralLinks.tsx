@@ -4,7 +4,6 @@ import { ExternalLink, Gift, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Helmet } from "react-helmet";
 import { useScrollToHash } from "@/hooks/useScrollToHash";
 import { UniversalLoader } from "@/components/ui/UniversalLoader";
 
@@ -93,14 +92,6 @@ const ReferralLinks = () => {
 
   return (
     <div className="min-h-screen py-16">
-      <Helmet>
-        <title>Referral Links — UPI, Shopping & App Bonuses | Rahul Gupta</title>
-        <meta name="description" content="Sign up via Rahul Gupta's referral links to unlock cashback, signup bonuses, and exclusive offers on UPI, shopping, and lifestyle apps." />
-        <link rel="canonical" href="https://rahulgupta.site/referrals" />
-        <meta property="og:title" content="Referral Links by Rahul Gupta" />
-        <meta property="og:description" content="Exclusive signup bonuses and cashback offers on top apps." />
-        <meta property="og:url" content="https://rahulgupta.site/referrals" />
-      </Helmet>
       <div className="section-container">
         <div className="max-w-6xl mx-auto">
           {/* Header */}

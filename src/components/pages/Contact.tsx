@@ -9,7 +9,6 @@ import SocialIcons from "@/components/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 import { UniversalSpinner } from "@/components/ui/UniversalLoader";
-import { Helmet } from "react-helmet";
 import { useScrollToHash } from "@/hooks/useScrollToHash";
 
 // Input validation schema
@@ -136,14 +135,6 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen py-16">
-      <Helmet>
-        <title>Contact Rahul Gupta — Email, WhatsApp & Message Form</title>
-        <meta name="description" content="Get in touch with Rahul Gupta — send a message, email, or reach out on WhatsApp for collaborations, feedback, or student queries." />
-        <link rel="canonical" href="https://rahulgupta.site/contact" />
-        <meta property="og:title" content="Contact Rahul Gupta" />
-        <meta property="og:description" content="Send a message, email, or WhatsApp Rahul Gupta." />
-        <meta property="og:url" content="https://rahulgupta.site/contact" />
-      </Helmet>
       <div className="section-container">
         <div className="max-w-6xl mx-auto">
           {/* Header */}

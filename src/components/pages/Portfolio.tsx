@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ExternalLink, Github, Briefcase, X } from 'lucide-react';
-import { Helmet } from 'react-helmet';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 
 interface PortfolioItem {
@@ -91,14 +90,6 @@ const Portfolio = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Portfolio — Websites, Apps & Tools by Rahul Gupta</title>
-        <meta name="description" content="Browse Rahul Gupta's portfolio of websites, mobile apps, and tools — live projects, tech stacks, and links to source code." />
-        <link rel="canonical" href="https://rahulgupta.site/portfolio" />
-        <meta property="og:title" content="Portfolio — Rahul Gupta" />
-        <meta property="og:description" content="Websites, apps, and tools built by Rahul Gupta." />
-        <meta property="og:url" content="https://rahulgupta.site/portfolio" />
-      </Helmet>
 
       <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
