@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Plus, Edit, Trash2, Eye, EyeOff, ArrowUp, ArrowDown } from 'lucide-react';
+import { uniqueChannel } from "@/lib/realtime";
 
 interface PortfolioItem {
   id: string;
@@ -60,7 +61,7 @@ const PortfolioManagement = () => {
     fetchItems();
 
     const channel = supabase
-      .channel('portfolio-changes')
+      .channel(uniqueChannel("portfolio-changes"))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'portfolio_items' }, () => {
         fetchItems();
       })

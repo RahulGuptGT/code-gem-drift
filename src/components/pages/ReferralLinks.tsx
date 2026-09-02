@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useScrollToHash } from "@/hooks/useScrollToHash";
 import { UniversalLoader } from "@/components/ui/UniversalLoader";
+import { uniqueChannel } from "@/lib/realtime";
 
 interface ReferralApp {
   id: string;
@@ -67,7 +68,7 @@ const ReferralLinks = () => {
 
   const subscribeToChanges = () => {
     const channel = supabase
-      .channel('referral-links-public-changes')
+      .channel(uniqueChannel("referral-links-public-changes"))
       .on(
         'postgres_changes',
         {

@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { Trash2, Search } from 'lucide-react';
+import { uniqueChannel } from "@/lib/realtime";
 
 interface ContactSubmission {
   id: string;
@@ -49,7 +50,7 @@ export const ContactManagement = () => {
 
   const setupRealtimeSubscription = () => {
     const channel = supabase
-      .channel('contact_submissions_changes')
+      .channel(uniqueChannel("contact_submissions_changes"))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'contact_submissions' }, () => {
         fetchSubmissions();
       })

@@ -9,6 +9,7 @@ import { Heart, Sparkles, Users, Target, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
+import { uniqueChannel } from "@/lib/realtime";
 
 const PRESET_AMOUNTS = [50, 100, 200, 500, 1000];
 
@@ -63,7 +64,7 @@ const FundRahul = () => {
   useEffect(() => {
     loadSupporters();
     const channel = supabase
-      .channel("donations-realtime")
+      .channel(uniqueChannel("donations-realtime"))
       .on("postgres_changes", { event: "*", schema: "public", table: "donations" }, () => loadSupporters())
       .subscribe();
     return () => { supabase.removeChannel(channel); };

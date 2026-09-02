@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { Plus, Trash2, ExternalLink, Edit, Eye, EyeOff, Search } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { uniqueChannel } from "@/lib/realtime";
 
 interface ReferralLink {
   id: string;
@@ -86,7 +87,7 @@ export const ReferralLinksManagement = () => {
 
   const subscribeToChanges = () => {
     const channel = supabase
-      .channel('referral-links-changes')
+      .channel(uniqueChannel("referral-links-changes"))
       .on(
         'postgres_changes',
         {
