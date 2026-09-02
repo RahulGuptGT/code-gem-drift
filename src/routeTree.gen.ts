@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CodeRouteImport } from './routes/$code'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FundRahulRouteImport } from './routes/fund-rahul'
 import { Route as SiteMapRouteImport } from './routes/site-map'
@@ -62,6 +63,11 @@ const AboutRoute = AboutRouteImport.update({
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/$code': typeof CodeRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
   '/site-map': typeof SiteMapRoute
@@ -262,6 +269,7 @@ export interface FileRoutesByTo {
   '/$code': typeof CodeRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
   '/site-map': typeof SiteMapRoute
@@ -299,6 +307,7 @@ export interface FileRoutesById {
   '/$code': typeof CodeRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
   '/site-map': typeof SiteMapRoute
@@ -337,6 +346,7 @@ export interface FileRouteTypes {
     | '/$code'
     | '/about'
     | '/app'
+    | '/auth'
     | '/contact'
     | '/fund-rahul'
     | '/site-map'
@@ -373,6 +383,7 @@ export interface FileRouteTypes {
     | '/$code'
     | '/about'
     | '/app'
+    | '/auth'
     | '/contact'
     | '/fund-rahul'
     | '/site-map'
@@ -409,6 +420,7 @@ export interface FileRouteTypes {
     | '/$code'
     | '/about'
     | '/app'
+    | '/auth'
     | '/contact'
     | '/fund-rahul'
     | '/site-map'
@@ -446,6 +458,7 @@ export interface RootRouteChildren {
   CodeRoute: typeof CodeRoute
   AboutRoute: typeof AboutRoute
   AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   FundRahulRoute: typeof FundRahulRoute
   SiteMapRoute: typeof SiteMapRoute
@@ -505,6 +518,13 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -735,6 +755,7 @@ const rootRouteChildren: RootRouteChildren = {
   CodeRoute: CodeRoute,
   AboutRoute: AboutRoute,
   AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   FundRahulRoute: FundRahulRoute,
   SiteMapRoute: SiteMapRoute,
