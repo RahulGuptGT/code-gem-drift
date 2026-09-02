@@ -30,7 +30,6 @@ interface AuthContextType {
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, displayName?: string) => Promise<{ error: any }>;
-  signInWithGoogle: () => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
   refresh: () => Promise<void>;
@@ -114,16 +113,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
-  const signInWithGoogle = async () => {
-    try {
-      const { lovable } = await import('@/integrations/lovable');
-      await lovable.auth.signInWithOAuth('google', { redirect_uri: window.location.origin });
-      return { error: null };
-    } catch (error) {
-      return { error };
-    }
-  };
-
   const signOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -154,7 +143,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoading,
         signIn,
         signUp,
-        signInWithGoogle,
         signOut,
         updateProfile,
         refresh,
