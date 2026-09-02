@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CodeRouteImport } from './routes/$code'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -18,6 +19,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FundRahulRouteImport } from './routes/fund-rahul'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SiteMapRouteImport } from './routes/site-map'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as HeenaIndexRouteImport } from './routes/heena/index'
 import { Route as LegalCancellationPolicyRouteImport } from './routes/legal/cancellation-policy'
@@ -56,6 +58,10 @@ const CodeRoute = CodeRouteImport.update({
   path: '/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -90,6 +96,11 @@ const SiteMapRoute = SiteMapRouteImport.update({
   id: '/site-map',
   path: '/site-map',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AppSplatRoute = AppSplatRouteImport.update({
   id: '/$',
@@ -243,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/fund-rahul': typeof FundRahulRoute
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
@@ -281,6 +293,7 @@ export interface FileRoutesByTo {
   '/fund-rahul': typeof FundRahulRoute
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
@@ -312,6 +325,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/$code': typeof CodeRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
@@ -320,6 +334,7 @@ export interface FileRoutesById {
   '/fund-rahul': typeof FundRahulRoute
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
@@ -360,6 +375,7 @@ export interface FileRouteTypes {
     | '/fund-rahul'
     | '/reset-password'
     | '/site-map'
+    | '/account'
     | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
@@ -398,6 +414,7 @@ export interface FileRouteTypes {
     | '/fund-rahul'
     | '/reset-password'
     | '/site-map'
+    | '/account'
     | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
@@ -428,6 +445,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/$code'
     | '/about'
     | '/app'
@@ -436,6 +454,7 @@ export interface FileRouteTypes {
     | '/fund-rahul'
     | '/reset-password'
     | '/site-map'
+    | '/_authenticated/account'
     | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
@@ -467,6 +486,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   CodeRoute: typeof CodeRoute
   AboutRoute: typeof AboutRoute
   AppRoute: typeof AppRouteWithChildren
@@ -519,6 +539,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -567,6 +594,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/site-map'
       preLoaderRoute: typeof SiteMapRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/app/$': {
       id: '/app/$'
@@ -760,6 +794,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 interface AppRouteChildren {
   AppSplatRoute: typeof AppSplatRoute
 }
@@ -772,6 +817,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   CodeRoute: CodeRoute,
   AboutRoute: AboutRoute,
   AppRoute: AppRouteWithChildren,

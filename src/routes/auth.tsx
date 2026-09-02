@@ -4,6 +4,9 @@ import Auth from "@/components/pages/Auth";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search['redirect'] === "string" ? (search['redirect'] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Sign in or create an account — Rahul Gupta" },
