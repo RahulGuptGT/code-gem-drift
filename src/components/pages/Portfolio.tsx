@@ -27,12 +27,29 @@ interface PortfolioItem {
 const PLATFORM_OPTIONS = ['Web', 'Android', 'iOS', 'Cross-platform', 'Desktop'];
 const STATUS_OPTIONS = ['Live', 'Beta', 'In Development', 'Archived'];
 
+/**
+ * URL slugs are plural (/portfolio/apps) while the stored category values are
+ * singular ('app'), so incoming slugs are normalised before filtering.
+ */
+const CATEGORY_SLUG_ALIASES: Record<string, string> = {
+  websites: 'website',
+  apps: 'app',
+  tools: 'tool',
+  others: 'other',
+};
+
+function normaliseCategory(slug?: string): string {
+  if (!slug) return 'all';
+  const lower = slug.toLowerCase();
+  return CATEGORY_SLUG_ALIASES[lower] ?? lower;
+}
+
 const Portfolio = () => {
   useScrollToHash();
   const { category: urlCategory } = useParams();
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<PortfolioItem[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState(urlCategory || 'all');
+  const [selectedCategory, setSelectedCategory] = useState(normaliseCategory(urlCategory));
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
@@ -48,9 +65,10 @@ const Portfolio = () => {
 
   useEffect(() => {
     if (urlCategory) {
-      setSelectedCategory(urlCategory);
+      setSelectedCategory(normaliseCategory(urlCategory));
     }
   }, [urlCategory]);
+
 
   useEffect(() => {
     fetchPortfolioItems();
