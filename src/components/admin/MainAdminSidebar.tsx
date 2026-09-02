@@ -12,12 +12,6 @@ import {
   LinkIcon,
   Smartphone,
   Brain,
-  Lock,
-  Clock,
-  BookOpen,
-  NotebookPen,
-  Users,
-  Sparkles,
   Eye
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
