@@ -48,16 +48,6 @@ const navigationGroups: NavGroup[] = [
     ],
   },
   {
-    label: 'PERSONAL',
-    items: [
-      { id: 'personal', label: 'Personal Hub', icon: Lock, path: '/heena/admin/personal' },
-      { id: 'personal-clock', label: 'Clock', icon: Clock, path: '/heena/admin/personal/clock' },
-      { id: 'personal-biography', label: 'Biography', icon: BookOpen, path: '/heena/admin/personal/biography' },
-      { id: 'personal-notepad', label: 'Notepad', icon: NotebookPen, path: '/heena/admin/personal/notepad' },
-      { id: 'personal-profile', label: 'People', icon: Users, path: '/heena/admin/personal/profile' },
-    ],
-  },
-  {
     label: 'TOOLS',
     items: [
       { id: 'referrals', label: 'Referral Links', icon: Link2, path: '/heena/admin/referrals' },
