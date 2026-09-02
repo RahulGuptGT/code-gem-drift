@@ -18,7 +18,13 @@ export const AdminLogin = () => {
   const { signIn, isAdmin } = useAdminAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/heena/admin";
+  const rawRedirect = searchParams.get("redirect") || "";
+  // Only allow same-origin admin paths; anything else falls back to dashboard.
+  const redirectTo =
+    rawRedirect.startsWith("/heena/admin") && !rawRedirect.startsWith("//")
+      ? rawRedirect
+      : "/heena/admin";
+
 
   // Enforce temp-login: if previous session was marked temporary and tab was closed, sign out on next load
   useEffect(() => {
