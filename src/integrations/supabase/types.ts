@@ -1316,44 +1316,6 @@ export type Database = {
         Returns: boolean
       }
       increment_url_clicks: { Args: { url_code: string }; Returns: undefined }
-      kodu_search_chunks: {
-        Args: {
-          match_count?: number
-          query_embedding: string
-          source_types?: string[]
-        }
-        Returns: {
-          chunk_index: number
-          content: string
-          similarity: number
-          source_id: string
-          source_table: string
-        }[]
-      }
-      kodu_search_fts: {
-        Args: {
-          match_count?: number
-          query_text: string
-          source_types?: string[]
-        }
-        Returns: {
-          rank: number
-          snippet: string
-          source_id: string
-          source_table: string
-          title: string
-        }[]
-      }
-      match_note_chunks: {
-        Args: { match_count?: number; query_embedding: string }
-        Returns: {
-          chunk_id: string
-          chunk_index: number
-          content: string
-          note_id: string
-          similarity: number
-        }[]
-      }
       set_pov_reaction: {
         Args: { _post_id: string; _reaction_type: string; _visitor_id: string }
         Returns: undefined
