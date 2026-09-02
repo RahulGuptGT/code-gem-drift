@@ -34,8 +34,6 @@ const navigationGroups: NavGroup[] = [
     label: 'OVERVIEW',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/heena/admin' },
-      { id: 'heena', label: 'Heena ✨ (DK)', icon: Sparkles, path: '/heena/admin/heena' },
-      { id: 'binod', label: 'Binod 🤖 (Admin)', icon: Bot, path: '/heena/admin/binod' },
       { id: 'analytics', label: 'Website Reach', icon: BarChart3, path: '/heena/admin/analytics' },
       { id: 'visitor-profiles', label: 'Visitor Profiles', icon: Eye, path: '/heena/admin/visitor-profiles' },
     ],
