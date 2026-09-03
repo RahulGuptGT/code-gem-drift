@@ -17,6 +17,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FundRahulRouteImport } from './routes/fund-rahul'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SiteMapRouteImport } from './routes/site-map'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -85,6 +86,11 @@ const ContactRoute = ContactRouteImport.update({
 const FundRahulRoute = FundRahulRouteImport.update({
   id: '/fund-rahul',
   path: '/fund-rahul',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -252,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
+  '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -291,6 +298,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
+  '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -332,6 +340,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/fund-rahul': typeof FundRahulRoute
+  '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -373,6 +382,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/fund-rahul'
+    | '/pricing'
     | '/reset-password'
     | '/site-map'
     | '/account'
@@ -412,6 +422,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/fund-rahul'
+    | '/pricing'
     | '/reset-password'
     | '/site-map'
     | '/account'
@@ -452,6 +463,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/fund-rahul'
+    | '/pricing'
     | '/reset-password'
     | '/site-map'
     | '/_authenticated/account'
@@ -493,6 +505,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   FundRahulRoute: typeof FundRahulRoute
+  PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SiteMapRoute: typeof SiteMapRoute
   LegalCancellationPolicyRoute: typeof LegalCancellationPolicyRoute
@@ -579,6 +592,13 @@ declare module '@tanstack/react-router' {
       path: '/fund-rahul'
       fullPath: '/fund-rahul'
       preLoaderRoute: typeof FundRahulRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -824,6 +844,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   FundRahulRoute: FundRahulRoute,
+  PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SiteMapRoute: SiteMapRoute,
   LegalCancellationPolicyRoute: LegalCancellationPolicyRoute,
