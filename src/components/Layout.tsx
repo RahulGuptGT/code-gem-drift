@@ -17,6 +17,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     { name: "Portfolio", href: "/portfolio" },
     { name: "My POVs", href: "/pov", highlight: true },
     { name: "Referrals", href: "/referrals" },
+    { name: "Plans", href: "/pricing" },
   ];
 
   const isActiveRoute = (href: string) => {
