@@ -15,6 +15,7 @@ import AppManagement from '@/components/admin/AppManagement';
 import POVManagement from '@/components/admin/POVManagement';
 import VisitorProfiles from '@/components/admin/VisitorProfiles';
 import UsersManagement from '@/components/admin/UsersManagement';
+import DocsManagement from '@/components/admin/DocsManagement';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Menu } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -31,6 +32,7 @@ const pathToSection: Record<string, string> = {
   '/heena/admin/url-shortener': 'url-shortener',
   '/heena/admin/apps': 'app-management',
   '/heena/admin/pov': 'pov',
+  '/heena/admin/docs': 'docs',
   '/heena/admin/support-chat': 'support-chat',
   '/heena/admin/chatbot-settings': 'chatbot-settings',
   '/heena/admin/settings': 'settings',
@@ -47,6 +49,7 @@ const sectionToPublicUrl: Record<string, string | null> = {
   'url-shortener': null,
   'app-management': '/portfolio/apps',
   'pov': '/pov',
+  'docs': null,
   'support-chat': null,
   'chatbot-settings': null,
   'settings': '/',
@@ -119,6 +122,7 @@ export default function AdminDashboard() {
       case 'url-shortener': return <UrlShortenerManagement />;
       case 'app-management': return <AppManagement />;
       case 'pov': return <POVManagement />;
+      case 'docs': return <DocsManagement />;
       case 'support-chat': return <SupportChatManagement />;
       case 'chatbot-settings': return <ChatbotSettings />;
       case 'settings': return <SiteSettingsManagement />;

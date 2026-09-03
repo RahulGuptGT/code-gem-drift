@@ -13,7 +13,8 @@ import {
   Smartphone,
   Brain,
   Eye,
-  Users
+  Users,
+  BookOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -50,6 +51,7 @@ const navigationGroups: NavGroup[] = [
     items: [
       { id: 'portfolio', label: 'Portfolio', icon: Briefcase, path: '/heena/admin/portfolio' },
       { id: 'pov', label: 'Rahul POV', icon: Brain, path: '/heena/admin/pov' },
+      { id: 'docs', label: 'Documentation', icon: BookOpen, path: '/heena/admin/docs' },
     ],
   },
   {
