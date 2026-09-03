@@ -21,6 +21,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SiteMapRouteImport } from './routes/site-map'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AppSplatRouteImport } from './routes/app.$'
 import { Route as HeenaIndexRouteImport } from './routes/heena/index'
 import { Route as LegalCancellationPolicyRouteImport } from './routes/legal/cancellation-policy'
@@ -106,6 +107,11 @@ const SiteMapRoute = SiteMapRouteImport.update({
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AppSplatRoute = AppSplatRouteImport.update({
@@ -262,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/library': typeof AuthenticatedLibraryRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
@@ -302,6 +309,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/library': typeof AuthenticatedLibraryRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
@@ -344,6 +352,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/site-map': typeof SiteMapRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/app/$': typeof AppSplatRoute
   '/legal/cancellation-policy': typeof LegalCancellationPolicyRoute
   '/legal/disclaimer': typeof LegalDisclaimerRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/site-map'
     | '/account'
+    | '/library'
     | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/site-map'
     | '/account'
+    | '/library'
     | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
@@ -467,6 +478,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/site-map'
     | '/_authenticated/account'
+    | '/_authenticated/library'
     | '/app/$'
     | '/legal/cancellation-policy'
     | '/legal/disclaimer'
@@ -620,6 +632,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/library': {
+      id: '/_authenticated/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof AuthenticatedLibraryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/app/$': {
@@ -816,10 +835,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
