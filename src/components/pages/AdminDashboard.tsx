@@ -14,6 +14,7 @@ import UrlShortenerManagement from '@/components/admin/UrlShortenerManagement';
 import AppManagement from '@/components/admin/AppManagement';
 import POVManagement from '@/components/admin/POVManagement';
 import VisitorProfiles from '@/components/admin/VisitorProfiles';
+import UsersManagement from '@/components/admin/UsersManagement';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Menu } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -23,6 +24,7 @@ const pathToSection: Record<string, string> = {
   '/heena/admin': 'dashboard',
   '/heena/admin/analytics': 'analytics',
   '/heena/admin/visitor-profiles': 'visitor-profiles',
+  '/heena/admin/users': 'users',
   '/heena/admin/contacts': 'contacts',
   '/heena/admin/portfolio': 'portfolio',
   '/heena/admin/referrals': 'referrals',
@@ -38,6 +40,7 @@ const sectionToPublicUrl: Record<string, string | null> = {
   'dashboard': null,
   'analytics': null,
   'visitor-profiles': null,
+  'users': null,
   'contacts': '/contact',
   'portfolio': '/portfolio',
   'referrals': '/referrals',
@@ -109,6 +112,7 @@ export default function AdminDashboard() {
       case 'dashboard': return <DashboardOverview />;
       case 'analytics': return <AdvancedAnalyticsDashboard />;
       case 'visitor-profiles': return <VisitorProfiles />;
+      case 'users': return <UsersManagement />;
       case 'contacts': return <ContactManagement />;
       case 'portfolio': return <PortfolioManagement />;
       case 'referrals': return <ReferralLinksManagement />;

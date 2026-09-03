@@ -12,7 +12,8 @@ import {
   LinkIcon,
   Smartphone,
   Brain,
-  Eye
+  Eye,
+  Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -36,6 +37,12 @@ const navigationGroups: NavGroup[] = [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/heena/admin' },
       { id: 'analytics', label: 'Website Reach', icon: BarChart3, path: '/heena/admin/analytics' },
       { id: 'visitor-profiles', label: 'Visitor Profiles', icon: Eye, path: '/heena/admin/visitor-profiles' },
+    ],
+  },
+  {
+    label: 'MEMBERS',
+    items: [
+      { id: 'users', label: 'Users & Plans', icon: Users, path: '/heena/admin/users' },
     ],
   },
   {

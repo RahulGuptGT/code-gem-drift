@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import SocialIcons from "@/components/SocialIcons";
 import SupportChatBot from "@/components/SupportChatBot";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import UserMenu from "@/components/UserMenu";
 import { cn } from "@/lib/utils";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -16,6 +17,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     { name: "Portfolio", href: "/portfolio" },
     { name: "My POVs", href: "/pov", highlight: true },
     { name: "Referrals", href: "/referrals" },
+    { name: "Plans", href: "/pricing" },
   ];
 
   const isActiveRoute = (href: string) => {
@@ -52,11 +54,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   {item.name}
                 </Link>
               ))}
-
+              <UserMenu />
             </div>
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center gap-2">
+              <UserMenu />
               <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-foreground">
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
