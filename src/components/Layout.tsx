@@ -54,11 +54,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   {item.name}
                 </Link>
               ))}
-
+              <UserMenu />
             </div>
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center gap-2">
+              <UserMenu />
               <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-foreground">
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
