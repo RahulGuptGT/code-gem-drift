@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const TIERS = ["starter", "signature", "sovereign"] as const;
 type PlanSlug = (typeof TIERS)[number];
@@ -25,9 +26,7 @@ async function assertAdmin(context: { supabase: any; userId: string }) {
 }
 
 export const listMembers = createServerFn({ method: "GET" })
-  .middleware([
-    (await import("@/integrations/supabase/auth-middleware")).requireSupabaseAuth,
-  ])
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdminMember[]> => {
     await assertAdmin(context as any);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -68,9 +67,7 @@ export const listMembers = createServerFn({ method: "GET" })
   });
 
 export const setMemberPlan = createServerFn({ method: "POST" })
-  .middleware([
-    (await import("@/integrations/supabase/auth-middleware")).requireSupabaseAuth,
-  ])
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { userId: string; planSlug: PlanSlug; durationDays?: number | null }) => {
     if (!input?.userId || typeof input.userId !== "string") throw new Error("userId required");
     if (!TIERS.includes(input.planSlug)) throw new Error("Invalid plan");
