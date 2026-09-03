@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import SocialIcons from "@/components/SocialIcons";
 import SupportChatBot from "@/components/SupportChatBot";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import UserMenu from "@/components/UserMenu";
 import { cn } from "@/lib/utils";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
