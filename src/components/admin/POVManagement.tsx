@@ -29,6 +29,8 @@ interface POVPost {
   disagree_count: number;
   comment_count: number;
   created_at: string;
+  min_tier: string;
+  excerpt: string | null;
 }
 
 const defaultPost = {
@@ -41,6 +43,8 @@ const defaultPost = {
   is_featured: false,
   is_hot_take: false,
   is_visible: true,
+  min_tier: 'public',
+  excerpt: '',
 };
 
 export default function POVManagement() {
@@ -81,6 +85,8 @@ export default function POVManagement() {
       is_featured: post.is_featured,
       is_hot_take: post.is_hot_take,
       is_visible: post.is_visible,
+      min_tier: post.min_tier ?? 'public',
+      excerpt: post.excerpt ?? '',
     });
     setDialogOpen(true);
   };
@@ -226,6 +232,24 @@ export default function POVManagement() {
                     <SelectItem value="short_pov">Short POV</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Who can read this</Label>
+                <Select value={form.min_tier} onValueChange={v => setForm({ ...form, min_tier: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="public">Everyone</SelectItem>
+                    <SelectItem value="starter">Starter members</SelectItem>
+                    <SelectItem value="signature">Signature members</SelectItem>
+                    <SelectItem value="sovereign">Sovereign members</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Locked preview (optional)</Label>
+                <Input value={form.excerpt} onChange={e => setForm({ ...form, excerpt: e.target.value })} placeholder="Teaser shown to non-members" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">

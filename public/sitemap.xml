@@ -24,4 +24,5 @@
   <url><loc>https://rahulgupta.online/legal/disclaimer</loc><priority>0.4</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://rahulgupta.online/legal/refund-policy</loc><priority>0.4</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://rahulgupta.online/legal/cancellation-policy</loc><priority>0.4</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://rahulgupta.online/book</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
