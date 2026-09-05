@@ -29,6 +29,8 @@ interface POVPost {
   disagree_count: number;
   comment_count: number;
   created_at: string;
+  min_tier: string;
+  excerpt: string | null;
 }
 
 const defaultPost = {
@@ -41,6 +43,8 @@ const defaultPost = {
   is_featured: false,
   is_hot_take: false,
   is_visible: true,
+  min_tier: 'public',
+  excerpt: '',
 };
 
 export default function POVManagement() {
@@ -81,6 +85,8 @@ export default function POVManagement() {
       is_featured: post.is_featured,
       is_hot_take: post.is_hot_take,
       is_visible: post.is_visible,
+      min_tier: post.min_tier ?? 'public',
+      excerpt: post.excerpt ?? '',
     });
     setDialogOpen(true);
   };
