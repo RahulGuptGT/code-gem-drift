@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { listPovPosts } from '@/lib/content.functions';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { POVHero } from '@/components/pov/POVHero';
 import { POVCategories } from '@/components/pov/POVCategories';
@@ -22,6 +22,8 @@ export interface POVPost {
   disagree_count: number;
   comment_count: number;
   created_at: string;
+  min_tier: string;
+  locked: boolean;
 }
 
 const LANGUAGES = [
@@ -49,23 +51,15 @@ export default function RahulPOV() {
 
   const fetchPosts = async () => {
     setIsLoading(true);
-    let query = supabase
-      .from('pov_posts')
-      .select('*')
-      .eq('is_visible', true)
-      .order('is_featured', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    if (activeCategory !== 'all') {
-      query = query.eq('category', activeCategory);
-    }
-    if (activeLanguage !== 'all') {
-      query = query.eq('language', activeLanguage);
-    }
-
-    const { data, error } = await query;
-    if (!error && data) {
-      setPosts(data as POVPost[]);
+    try {
+      // Server decides what each plan may read; locked bodies never reach the browser.
+      const { posts: rows } = await listPovPosts({
+        data: { category: activeCategory, language: activeLanguage },
+      });
+      setPosts(rows as POVPost[]);
+    } catch (err) {
+      console.error('POV load error:', err);
+      setPosts([]);
     }
     setIsLoading(false);
   };
