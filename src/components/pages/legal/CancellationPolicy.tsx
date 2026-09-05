@@ -10,32 +10,38 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
 const CancellationPolicy = () => (
   <LegalLayout
     title="Cancellation Policy"
-    description="Information about cancelling subscriptions or recurring payments."
+    description="How to cancel your membership and what happens when you do."
     currentPath="/legal/cancellation-policy"
+    lastUpdated="September 5, 2026"
   >
-    <Section title="1. No Subscriptions Currently">
-      <p>At this time, this website does <strong>not offer any subscription-based products or services</strong>. All contributions are one-time and voluntary.</p>
-    </Section>
-
-    <Section title="2. No Recurring Payments">
-      <p>We do not currently auto-charge or set up recurring billing on any payment method. Each contribution is a single, manual transaction initiated by you.</p>
-    </Section>
-
-    <Section title="3. Future Updates">
-      <p>If subscription-based services are introduced in the future (such as monthly support tiers, premium content, or memberships), this Cancellation Policy will be updated to reflect:</p>
+    <Section title="1. Membership Plans">
+      <p>This website offers the following membership options:</p>
       <ul className="list-disc pl-6 space-y-1">
-        <li>How to cancel a subscription</li>
-        <li>When cancellations take effect</li>
-        <li>Whether prorated refunds apply</li>
+        <li><strong>Starter</strong> — free access, nothing to cancel.</li>
+        <li><strong>Signature</strong> — a paid recurring (monthly) membership.</li>
+        <li><strong>Sovereign</strong> — a paid one-time purchase; since it never renews, there is nothing to cancel.</li>
       </ul>
     </Section>
 
-    <Section title="4. Cancelling a Pending Contribution">
-      <p>If you initiated a contribution but the payment has not yet completed, simply close the payment window — no charge will occur. If you have already paid and need help, please refer to the <a href="/legal/refund-policy" className="text-primary hover:underline">Refund Policy</a>.</p>
+    <Section title="2. Cancelling a Signature Membership">
+      <p>You can cancel your Signature membership at any time by emailing <a href="mailto:rahul@rahulgupta.online" className="text-primary hover:underline">rahul@rahulgupta.online</a> from your registered email address.</p>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>Your access continues until the end of the current paid period.</li>
+        <li>After that, your account automatically moves to the free Starter tier — no further charges.</li>
+        <li>Cancelling does <strong>not</strong> trigger a refund for the current or past billing periods.</li>
+      </ul>
+    </Section>
+
+    <Section title="3. One-Time Purchases">
+      <p>Sovereign membership, the book, and voluntary contributions ("Fund Rahul") are one-time payments. They cannot be cancelled once completed, and are non-refundable except in the rare cases described in our <a href="/legal/refund-policy" className="text-primary hover:underline">Refund Policy</a> (accidental duplicate, unauthorized, or technical-error payments reported within 7 days).</p>
+    </Section>
+
+    <Section title="4. Pending Payments">
+      <p>If you started a payment but have not completed it, simply close the payment window — no charge will occur. If money was deducted but you did not receive access, email us with the transaction details and we will resolve it.</p>
     </Section>
 
     <Section title="5. Contact">
-      <p>For any cancellation-related questions, please <a href="/contact" className="text-primary hover:underline">contact us</a>.</p>
+      <p>For any cancellation request or question, email <a href="mailto:rahul@rahulgupta.online" className="text-primary hover:underline">rahul@rahulgupta.online</a> or use the <a href="/contact" className="text-primary hover:underline">contact page</a>. We respond within 3 business days.</p>
     </Section>
   </LegalLayout>
 );
