@@ -11,6 +11,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { UniversalLoader } from '@/components/ui/UniversalLoader';
 import { toast } from 'sonner';
 import { Loader2, LogOut, ShieldCheck } from 'lucide-react';
+import { useServerFn } from '@tanstack/react-start';
+import { getMyPayments } from '@/lib/payments.functions';
+
+interface PaymentRow {
+  id: string;
+  plan_slug: string;
+  amount: number;
+  currency: string;
+  status: string;
+  provider_payment_id: string | null;
+  created_at: string;
+}
 
 function formatDate(value?: string | null) {
   if (!value) return null;
@@ -23,6 +35,21 @@ export default function Account() {
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
   const [saving, setSaving] = useState(false);
+  const [payments, setPayments] = useState<PaymentRow[]>([]);
+  const fetchPayments = useServerFn(getMyPayments);
+
+  useEffect(() => {
+    if (!user) return;
+    let active = true;
+    fetchPayments()
+      .then(rows => {
+        if (active) setPayments((rows ?? []) as PaymentRow[]);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [user, fetchPayments]);
 
   useEffect(() => {
     setDisplayName(profile?.display_name ?? '');
@@ -97,6 +124,37 @@ export default function Account() {
             </Button>
           </CardContent>
         </Card>
+
+        {payments.length > 0 && (
+          <Card className="card-modern">
+            <CardHeader>
+              <CardTitle>Billing history</CardTitle>
+              <CardDescription>Aapke membership payments.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {payments.map(payment => (
+                <div
+                  key={payment.id}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3 text-sm"
+                >
+                  <div>
+                    <div className="font-medium capitalize">{payment.plan_slug}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {formatDate(payment.created_at)}
+                      {payment.provider_payment_id ? ` · ${payment.provider_payment_id}` : ''}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span>₹{Number(payment.amount).toLocaleString('en-IN')}</span>
+                    <Badge variant={payment.status === 'success' ? 'default' : 'secondary'}>
+                      {payment.status}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="card-modern">
           <CardHeader>
