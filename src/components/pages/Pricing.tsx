@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Check, Crown, Minus, Sparkles } from 'lucide-react';
+import { Check, Crown, Loader2, Minus, Sparkles } from 'lucide-react';
+import { useServerFn } from '@tanstack/react-start';
+import { toast } from 'sonner';
+import { createPlanCheckout } from '@/lib/payments.functions';
 import { db, tierRank } from '@/integrations/supabase/db';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -24,6 +27,26 @@ export default function Pricing() {
   const location = useLocation();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [checkoutSlug, setCheckoutSlug] = useState<string | null>(null);
+  const startCheckout = useServerFn(createPlanCheckout);
+
+  const handleSubscribe = async (slug: string) => {
+    setCheckoutSlug(slug);
+    try {
+      const result = await startCheckout({
+        data: { planSlug: slug, origin: window.location.origin },
+      });
+      if (!result.ok || !result.url) {
+        toast.error(result.error ?? 'Payment shuru nahi ho paaya');
+        setCheckoutSlug(null);
+        return;
+      }
+      window.location.href = result.url;
+    } catch {
+      toast.error('Payment shuru nahi ho paaya. Thodi der baad try karein.');
+      setCheckoutSlug(null);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -134,8 +157,16 @@ export default function Pricing() {
                         Included in your plan
                       </Button>
                     ) : (
-                      <Button disabled title="Payments coming soon">
-                        Coming soon
+                      <Button
+                        onClick={() => handleSubscribe(plan.slug)}
+                        disabled={checkoutSlug !== null}
+                      >
+                        {checkoutSlug === plan.slug && (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        {plan.billing_period === 'monthly'
+                          ? `Subscribe · ${priceLabel(plan)}/month`
+                          : `Get lifetime access · ${priceLabel(plan)}`}
                       </Button>
                     )}
                   </CardContent>

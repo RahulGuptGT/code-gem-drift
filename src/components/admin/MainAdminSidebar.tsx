@@ -16,6 +16,7 @@ import {
   Users,
   BookOpen,
   CreditCard,
+  IndianRupee,
   Library
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -47,6 +48,7 @@ const navigationGroups: NavGroup[] = [
     items: [
       { id: 'users', label: 'Users & Plans', icon: Users, path: '/heena/admin/users' },
       { id: 'plans', label: 'Plans & Pricing', icon: CreditCard, path: '/heena/admin/plans' },
+      { id: 'payments', label: 'Payments', icon: IndianRupee, path: '/heena/admin/payments' },
     ],
   },
   {

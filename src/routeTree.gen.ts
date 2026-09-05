@@ -51,6 +51,7 @@ import { Route as ApiPublicTranscribeAudioRouteImport } from './routes/api/publi
 import { Route as HeenaAdminIndexRouteImport } from './routes/heena/admin.index'
 import { Route as HeenaAdminSplatRouteImport } from './routes/heena/admin.$'
 import { Route as ApiPublicFileSplatRouteImport } from './routes/api/public/file/$'
+import { Route as ApiPublicPaymentsInstamojoRouteImport } from './routes/api/public/payments/instamojo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -267,6 +268,12 @@ const ApiPublicFileSplatRoute = ApiPublicFileSplatRouteImport.update({
   path: '/api/public/file/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPaymentsInstamojoRoute =
+  ApiPublicPaymentsInstamojoRouteImport.update({
+    id: '/api/public/payments/instamojo',
+    path: '/api/public/payments/instamojo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -310,6 +317,7 @@ export interface FileRoutesByFullPath {
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
   '/api/public/file/$': typeof ApiPublicFileSplatRoute
+  '/api/public/payments/instamojo': typeof ApiPublicPaymentsInstamojoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -353,6 +361,7 @@ export interface FileRoutesByTo {
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin': typeof HeenaAdminIndexRoute
   '/api/public/file/$': typeof ApiPublicFileSplatRoute
+  '/api/public/payments/instamojo': typeof ApiPublicPaymentsInstamojoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -398,6 +407,7 @@ export interface FileRoutesById {
   '/heena/admin/$': typeof HeenaAdminSplatRoute
   '/heena/admin/': typeof HeenaAdminIndexRoute
   '/api/public/file/$': typeof ApiPublicFileSplatRoute
+  '/api/public/payments/instamojo': typeof ApiPublicPaymentsInstamojoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/heena/admin/$'
     | '/heena/admin/'
     | '/api/public/file/$'
+    | '/api/public/payments/instamojo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -486,6 +497,7 @@ export interface FileRouteTypes {
     | '/heena/admin/$'
     | '/heena/admin'
     | '/api/public/file/$'
+    | '/api/public/payments/instamojo'
   id:
     | '__root__'
     | '/'
@@ -530,6 +542,7 @@ export interface FileRouteTypes {
     | '/heena/admin/$'
     | '/heena/admin/'
     | '/api/public/file/$'
+    | '/api/public/payments/instamojo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -572,6 +585,7 @@ export interface RootRouteChildren {
   HeenaAdminSplatRoute: typeof HeenaAdminSplatRoute
   HeenaAdminIndexRoute: typeof HeenaAdminIndexRoute
   ApiPublicFileSplatRoute: typeof ApiPublicFileSplatRoute
+  ApiPublicPaymentsInstamojoRoute: typeof ApiPublicPaymentsInstamojoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -870,6 +884,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicFileSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/payments/instamojo': {
+      id: '/api/public/payments/instamojo'
+      path: '/api/public/payments/instamojo'
+      fullPath: '/api/public/payments/instamojo'
+      preLoaderRoute: typeof ApiPublicPaymentsInstamojoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -936,6 +957,7 @@ const rootRouteChildren: RootRouteChildren = {
   HeenaAdminSplatRoute: HeenaAdminSplatRoute,
   HeenaAdminIndexRoute: HeenaAdminIndexRoute,
   ApiPublicFileSplatRoute: ApiPublicFileSplatRoute,
+  ApiPublicPaymentsInstamojoRoute: ApiPublicPaymentsInstamojoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

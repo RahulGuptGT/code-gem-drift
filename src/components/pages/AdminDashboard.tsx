@@ -16,6 +16,7 @@ import POVManagement from '@/components/admin/POVManagement';
 import VisitorProfiles from '@/components/admin/VisitorProfiles';
 import UsersManagement from '@/components/admin/UsersManagement';
 import PlansManagement from '@/components/admin/PlansManagement';
+import PaymentsManagement from '@/components/admin/PaymentsManagement';
 import BookManagement from '@/components/admin/BookManagement';
 import DocsManagement from '@/components/admin/DocsManagement';
 import { Button } from '@/components/ui/button';
@@ -123,6 +124,7 @@ export default function AdminDashboard() {
       case 'visitor-profiles': return <VisitorProfiles />;
       case 'users': return <UsersManagement />;
       case 'plans': return <PlansManagement />;
+      case 'payments': return <PaymentsManagement />;
       case 'book': return <BookManagement />;
       case 'contacts': return <ContactManagement />;
       case 'portfolio': return <PortfolioManagement />;
