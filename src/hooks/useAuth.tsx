@@ -60,7 +60,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     ]);
 
     setProfile((profileRes.data as Profile) ?? null);
-    setMembership((membershipRes.data as Membership) ?? null);
+    // An expired membership must not keep granting access — fall back to Starter.
+    const rawMembership = (membershipRes.data as Membership) ?? null;
+    const isExpired =
+      !!rawMembership?.expires_at && new Date(rawMembership.expires_at).getTime() <= Date.now();
+    setMembership(isExpired ? null : rawMembership);
     setIsAdmin(!!roleRes.data);
     setIsLoading(false);
   }, []);
