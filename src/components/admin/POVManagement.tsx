@@ -236,6 +236,24 @@ export default function POVManagement() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
+                <Label>Who can read this</Label>
+                <Select value={form.min_tier} onValueChange={v => setForm({ ...form, min_tier: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="public">Everyone</SelectItem>
+                    <SelectItem value="starter">Starter members</SelectItem>
+                    <SelectItem value="signature">Signature members</SelectItem>
+                    <SelectItem value="sovereign">Sovereign members</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Locked preview (optional)</Label>
+                <Input value={form.excerpt} onChange={e => setForm({ ...form, excerpt: e.target.value })} placeholder="Teaser shown to non-members" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
                 <Label>Language</Label>
                 <Select value={form.language} onValueChange={v => setForm({ ...form, language: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
