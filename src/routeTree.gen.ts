@@ -23,6 +23,7 @@ import { Route as SiteMapRouteImport } from './routes/site-map'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AppSplatRouteImport } from './routes/app.$'
+import { Route as BookIndexRouteImport } from './routes/book/index'
 import { Route as HeenaIndexRouteImport } from './routes/heena/index'
 import { Route as LegalCancellationPolicyRouteImport } from './routes/legal/cancellation-policy'
 import { Route as LegalDisclaimerRouteImport } from './routes/legal/disclaimer'
@@ -118,6 +119,11 @@ const AppSplatRoute = AppSplatRouteImport.update({
   id: '/$',
   path: '/$',
   getParentRoute: () => AppRoute,
+} as any)
+const BookIndexRoute = BookIndexRouteImport.update({
+  id: '/book/',
+  path: '/book/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const HeenaIndexRoute = HeenaIndexRouteImport.update({
   id: '/heena/',
@@ -278,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/portfolio/$category': typeof PortfolioCategoryRoute
   '/pov/$category': typeof PovCategoryRoute
   '/referrals/$category': typeof ReferralsCategoryRoute
+  '/book/': typeof BookIndexRoute
   '/heena/': typeof HeenaIndexRoute
   '/portfolio/': typeof PortfolioIndexRoute
   '/pov/': typeof PovIndexRoute
@@ -319,6 +326,7 @@ export interface FileRoutesByTo {
   '/portfolio/$category': typeof PortfolioCategoryRoute
   '/pov/$category': typeof PovCategoryRoute
   '/referrals/$category': typeof ReferralsCategoryRoute
+  '/book': typeof BookIndexRoute
   '/heena': typeof HeenaIndexRoute
   '/portfolio': typeof PortfolioIndexRoute
   '/pov': typeof PovIndexRoute
@@ -362,6 +370,7 @@ export interface FileRoutesById {
   '/portfolio/$category': typeof PortfolioCategoryRoute
   '/pov/$category': typeof PovCategoryRoute
   '/referrals/$category': typeof ReferralsCategoryRoute
+  '/book/': typeof BookIndexRoute
   '/heena/': typeof HeenaIndexRoute
   '/portfolio/': typeof PortfolioIndexRoute
   '/pov/': typeof PovIndexRoute
@@ -405,6 +414,7 @@ export interface FileRouteTypes {
     | '/portfolio/$category'
     | '/pov/$category'
     | '/referrals/$category'
+    | '/book/'
     | '/heena/'
     | '/portfolio/'
     | '/pov/'
@@ -446,6 +456,7 @@ export interface FileRouteTypes {
     | '/portfolio/$category'
     | '/pov/$category'
     | '/referrals/$category'
+    | '/book'
     | '/heena'
     | '/portfolio'
     | '/pov'
@@ -488,6 +499,7 @@ export interface FileRouteTypes {
     | '/portfolio/$category'
     | '/pov/$category'
     | '/referrals/$category'
+    | '/book/'
     | '/heena/'
     | '/portfolio/'
     | '/pov/'
@@ -528,6 +540,7 @@ export interface RootRouteChildren {
   PortfolioCategoryRoute: typeof PortfolioCategoryRoute
   PovCategoryRoute: typeof PovCategoryRoute
   ReferralsCategoryRoute: typeof ReferralsCategoryRoute
+  BookIndexRoute: typeof BookIndexRoute
   HeenaIndexRoute: typeof HeenaIndexRoute
   PortfolioIndexRoute: typeof PortfolioIndexRoute
   PovIndexRoute: typeof PovIndexRoute
@@ -647,6 +660,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/$'
       preLoaderRoute: typeof AppSplatRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/book/': {
+      id: '/book/'
+      path: '/book'
+      fullPath: '/book/'
+      preLoaderRoute: typeof BookIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/heena/': {
       id: '/heena/'
@@ -876,6 +896,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioCategoryRoute: PortfolioCategoryRoute,
   PovCategoryRoute: PovCategoryRoute,
   ReferralsCategoryRoute: ReferralsCategoryRoute,
+  BookIndexRoute: BookIndexRoute,
   HeenaIndexRoute: HeenaIndexRoute,
   PortfolioIndexRoute: PortfolioIndexRoute,
   PovIndexRoute: PovIndexRoute,
