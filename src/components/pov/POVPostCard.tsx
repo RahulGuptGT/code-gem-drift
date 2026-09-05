@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { POVPost } from '@/components/pages/RahulPOV';
 import { supabase } from '@/integrations/supabase/client';
-import { ThumbsUp, ThumbsDown, MessageCircle, Flame, Clock, Tag } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, MessageCircle, Flame, Clock, Tag, Lock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { TIER_LABEL, type Tier } from '@/integrations/supabase/db';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { POVComments } from './POVComments';
@@ -109,11 +111,25 @@ export function POVPostCard({ post, onUpdated }: POVPostCardProps) {
         </h3>
 
         {/* Content */}
-        <div className={`text-foreground/80 leading-relaxed whitespace-pre-line ${
-          isQuickPov ? 'text-base sm:text-lg font-medium' : 'text-sm sm:text-base'
-        }`}>
-          {post.content}
+        <div className="relative">
+          <div className={`text-foreground/80 leading-relaxed whitespace-pre-line ${
+            isQuickPov ? 'text-base sm:text-lg font-medium' : 'text-sm sm:text-base'
+          } ${post.locked ? 'max-h-32 overflow-hidden [mask-image:linear-gradient(to_bottom,black,transparent)]' : ''}`}>
+            {post.content}
+          </div>
         </div>
+
+        {post.locked && (
+          <div className="mt-4 rounded-xl border border-dashed border-secondary/50 bg-secondary/5 p-4 text-center">
+            <Lock className="mx-auto mb-2 h-5 w-5 text-secondary" />
+            <p className="text-sm font-medium text-foreground">
+              Ye poori writing {TIER_LABEL[(post.min_tier as Tier) ?? 'signature']} members ke liye hai.
+            </p>
+            <Button size="sm" className="mt-3" asChild>
+              <Link to="/pricing">Unlock with {TIER_LABEL[(post.min_tier as Tier) ?? 'signature']}</Link>
+            </Button>
+          </div>
+        )}
 
         {/* Author */}
         <div className="mt-4 text-sm text-muted-foreground">
