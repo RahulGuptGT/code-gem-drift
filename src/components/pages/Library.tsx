@@ -14,7 +14,6 @@ interface Book {
   title: string;
   subtitle: string | null;
   cover_url: string | null;
-  min_tier: string;
 }
 
 export default function Library() {
@@ -25,7 +24,7 @@ export default function Library() {
   useEffect(() => {
     let active = true;
     db.from('books')
-      .select('id, slug, title, subtitle, cover_url, min_tier')
+      .select('id, slug, title, subtitle, cover_url')
       .eq('is_published', true)
       .order('created_at', { ascending: true })
       .then(({ data }: any) => {
@@ -74,11 +73,9 @@ export default function Library() {
                 )}
               </CardHeader>
               <CardContent className="mt-auto flex items-center justify-between">
-                <Badge variant="outline">
-                  {TIER_LABEL[(book.min_tier ?? 'public') as Tier] ?? book.min_tier}
-                </Badge>
+                <Badge variant="outline">Long-form</Badge>
                 <Button size="sm" variant="outline" asChild>
-                  <Link to={`/book/${book.slug}`}>Open</Link>
+                  <Link to="/book">Open</Link>
                 </Button>
               </CardContent>
             </Card>
