@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Mic, MicOff, Paperclip, X, Sparkles, MessageSquareQuestion, PencilLine } from "lucide-react";
+import { Mic, MicOff, Paperclip, X, Sparkles, MessageCircleQuestionMark, PencilLine } from "lucide-react";
 import { ChatSendButton } from "@/components/ui/ChatSendButton";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
