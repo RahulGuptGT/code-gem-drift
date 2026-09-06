@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 
 const MODE_META: Record<WorkspaceMode, { label: string; desc: string; icon: any }> = {
   auto: { label: "Default", desc: "AI khud decide karega — answer ya action plan", icon: Sparkles },
-  ask: { label: "Ask", desc: "Sirf jawab dega, kuch change nahi", icon: MessageSquareQuestion },
+  ask: { label: "Ask", desc: "Sirf jawab dega, kuch change nahi", icon: HelpCircle },
   edit: { label: "Edit (Agent)", desc: "Badlav ka plan banayega (write tools Phase B mein)", icon: PencilLine },
 };
 
