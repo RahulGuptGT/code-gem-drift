@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_activity_log: {
+        Row: {
+          admin_user_id: string | null
+          created_at: string
+          id: string
+          mode: string
+          model: string | null
+          prompt: string | null
+          result_summary: string | null
+          thread_id: string | null
+          tools_used: Json
+        }
+        Insert: {
+          admin_user_id?: string | null
+          created_at?: string
+          id?: string
+          mode?: string
+          model?: string | null
+          prompt?: string | null
+          result_summary?: string | null
+          thread_id?: string | null
+          tools_used?: Json
+        }
+        Update: {
+          admin_user_id?: string | null
+          created_at?: string
+          id?: string
+          mode?: string
+          model?: string | null
+          prompt?: string | null
+          result_summary?: string | null
+          thread_id?: string | null
+          tools_used?: Json
+        }
+        Relationships: []
+      }
       analytics_behavior_events: {
         Row: {
           created_at: string

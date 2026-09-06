@@ -19,6 +19,7 @@ import PlansManagement from '@/components/admin/PlansManagement';
 import PaymentsManagement from '@/components/admin/PaymentsManagement';
 import BookManagement from '@/components/admin/BookManagement';
 import DocsManagement from '@/components/admin/DocsManagement';
+import { WorkspaceAI } from '@/components/admin/workspace-ai/WorkspaceAI';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Menu } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -26,6 +27,7 @@ import { UniversalLoader } from "@/components/ui/UniversalLoader";
 
 const pathToSection: Record<string, string> = {
   '/heena/admin': 'dashboard',
+  '/heena/admin/ai': 'workspace-ai',
   '/heena/admin/analytics': 'analytics',
   '/heena/admin/visitor-profiles': 'visitor-profiles',
   '/heena/admin/users': 'users',
@@ -45,6 +47,7 @@ const pathToSection: Record<string, string> = {
 
 const sectionToPublicUrl: Record<string, string | null> = {
   'dashboard': null,
+  'workspace-ai': null,
   'analytics': null,
   'visitor-profiles': null,
   'users': null,
@@ -120,6 +123,7 @@ export default function AdminDashboard() {
   const renderContent = () => {
     switch (activeSection) {
       case 'dashboard': return <DashboardOverview />;
+      case 'workspace-ai': return <WorkspaceAI />;
       case 'analytics': return <AdvancedAnalyticsDashboard />;
       case 'visitor-profiles': return <VisitorProfiles />;
       case 'users': return <UsersManagement />;

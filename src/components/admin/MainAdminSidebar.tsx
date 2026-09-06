@@ -36,6 +36,12 @@ interface NavGroup {
 
 const navigationGroups: NavGroup[] = [
   {
+    label: 'WORKSPACE',
+    items: [
+      { id: 'workspace-ai', label: 'Workspace AI', icon: Bot, path: '/heena/admin/ai' },
+    ],
+  },
+  {
     label: 'OVERVIEW',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/heena/admin' },
