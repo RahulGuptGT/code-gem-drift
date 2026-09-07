@@ -707,9 +707,17 @@ export async function handler(request: Request): Promise<Response> {
           toolsUsed.push(tool.name);
           try {
             const args = call.function.arguments ? JSON.parse(call.function.arguments) : {};
-            result = await tool.run(args, supabaseAdmin);
-            if (WRITE_TOOLS.some((t) => t.name === tool.name)) {
-              writeLog.push({ tool: tool.name, args, result });
+            const isWrite = WRITE_TOOL_NAMES.has(tool.name);
+            const key = isWrite ? stableKey(tool.name, args) : "";
+
+            if (isWrite && !approvals.has(key)) {
+              // Do NOT execute — queue it for admin approval instead.
+              const preview = await describeWrite(tool.name, args, supabaseAdmin);
+              pending.push({ key, tool: tool.name, args, ...preview });
+              result = { pending_approval: true, note: "Admin ki approval ka intezaar hai — abhi kuch change nahi hua." };
+            } else {
+              result = await tool.run(args, supabaseAdmin);
+              if (isWrite) writeLog.push({ tool: tool.name, args, result });
             }
           } catch (e: any) {
             result = { error: e?.message ?? "tool failed" };
