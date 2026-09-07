@@ -679,6 +679,11 @@ export async function handler(request: Request): Promise<Response> {
         .filter((a: any) => a && typeof a.tool === "string")
         .map((a: any) => stableKey(a.tool, a.args))
     );
+    const approvalIds = new Set<string>(
+      (Array.isArray(body.approvals) ? body.approvals : [])
+        .filter((a: any) => a && typeof a.tool === "string")
+        .map((a: any) => identityKey(a.tool, a.args))
+    );
     const pending: any[] = [];
 
     // Write tools are only exposed outside read-only 'ask' mode.
@@ -716,7 +721,8 @@ export async function handler(request: Request): Promise<Response> {
             const isWrite = WRITE_TOOL_NAMES.has(tool.name);
             const key = isWrite ? stableKey(tool.name, args) : "";
 
-            if (isWrite && !approvals.has(key)) {
+            const approved = isWrite && (approvals.has(key) || approvalIds.has(identityKey(tool.name, args)));
+            if (isWrite && !approved) {
               // Do NOT execute — queue it for admin approval instead.
               const preview = await describeWrite(tool.name, args, supabaseAdmin);
               pending.push({ key, tool: tool.name, args, ...preview });
