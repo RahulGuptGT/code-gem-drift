@@ -3,9 +3,10 @@
 // Auth: caller must send a Supabase user access token in Authorization; the
 // token's user must have the 'admin' role. Everything else is rejected 401/403.
 //
-// Phase A scope: READ tools over the whole site (posts, book, users, plans,
-// payments, contacts, referrals, analytics, settings...). Edit/Agent mode is
-// recognized in the system prompt but write tools land in Phase B.
+// Phase A: READ tools over the whole site.
+// Phase B: WRITE tools (create/update/delete on whitelisted tables + membership
+// grants). Write tools are only exposed in 'auto' and 'edit' modes — 'ask' mode
+// is strictly read-only.
 
 import { GEMINI_CHAT_URL, GEMINI_CHAT_MODEL, mapGeminiModel } from "./_shared/geminiClient";
 
@@ -38,27 +39,43 @@ Tumhare paas poore site ka read access hai: POV posts, book chapters, plans, mem
 - Individual users ka personal data (email etc.) sirf tab do jab admin explicitly maange — admin hi hai, par fir bhi relevant columns hi do.
 - Kabhi bhi API keys, secrets, service tokens reveal mat karo.`;
 
+  const writeRules = `
+
+## TOOLS (WRITE ACCESS) — Phase B
+Tumhare paas ab write tools bhi hain:
+- \`create_record\` — nayi row banane ke liye (table + values).
+- \`update_record\` — existing row edit karne ke liye (table + id + sirf badalne wale fields).
+- \`delete_record\` — row delete karne ke liye (table + id + confirm:true).
+- \`grant_membership\` — kisi user ko plan dena/badalna (email ya user_id + plan_slug).
+- \`set_site_setting\` — site setting key ka value set karna.
+
+### WRITE RULES (STRICT)
+1. Update/delete se PEHLE hamesha relevant read tool chalao taaki sahi row id mile. id guess mat karo.
+2. \`update_record\` mein sirf wahi fields bhejo jo actually badalne hain — baaki chhod do.
+3. DELETE destructive hai: pehle row read karke admin ko batao kya delete hoga aur explicit "haan delete karo" milne par hi \`confirm: true\` ke saath chalao. Agar admin ne clearly delete bola hai to seedha kar sakte ho, par response mein kya delete hua wo clearly likho.
+4. Bulk destructive kaam (ek saath 5+ rows delete) mat karo — pehle confirm maango.
+5. Har write ke baad short summary do: kya badla, kis row mein, purani vs nayi value.
+6. Tool ne error diya to us error ko clearly batao — success ka jhooth kabhi mat bolo.
+7. min_tier values sirf: public, starter, signature, sovereign.`;
+
   if (mode === "ask") {
     return `${base}
 
-## MODE: ASK
-Sirf jawab do. Koi bhi change/badlav suggest karte waqt clearly bolo ki tumne kuch change NAHI kiya — sirf information di hai.`;
+## MODE: ASK (READ-ONLY)
+Sirf jawab do. Is mode mein write tools available hi nahi hain. Agar admin koi change maange to batao ki Ask mode read-only hai — Default ya Edit mode mein switch karke bolein.`;
   }
   if (mode === "edit") {
-    return `${base}
+    return `${base}${writeRules}
 
 ## MODE: EDIT (AGENT)
-Admin chahta hai ki tum site mein badlav karo. Abhi tumhare paas sirf READ tools hain — write/update/delete tools agle phase mein grant honge. Isliye:
-1. Jo change maanga gaya hai, pehle relevant data read karke samjho.
-2. Phir clearly batao EXACTLY kya change karna chahiye (kis row mein, kaunsa field, kya value) — ek precise action plan do.
-3. Bata do ki write access abhi enable nahi hai, aur admin chahe to admin panel mein manually ye change kar sakta hai, ya next phase ke baad tum khud kar doge.
-Kabhi claim mat karo ki tumne kuch change kar diya jab tak write tool ne confirm na kiya.`;
+Admin chahta hai ki tum site mein badlav karo. Read karo → change apply karo (write tools se) → summary do. Bina zaroori clarification ke ruk mat jao; agar request ambiguous hai tabhi sawaal poocho. Kabhi claim mat karo ki kuch change hua jab tak write tool ne success confirm na kiya ho.`;
   }
-  return `${base}
+  return `${base}${writeRules}
 
 ## MODE: AUTO
-Khud decide karo: sawaal hai to sirf jawab do; badlav ki request hai to data read karke precise action plan do aur bata do ki write tools abhi Phase B mein aayenge. Kabhi claim mat karo ki change ho gaya jab tak write tool confirm na kare.`;
+Khud decide karo: sawaal hai to sirf jawab do; badlav ki request hai to write tools se change apply karo aur summary do. Destructive delete ke liye confirm rule follow karo. Kabhi claim mat karo ki change ho gaya jab tak write tool confirm na kare.`;
 }
+
 
 // ---------- Read tools ----------
 
@@ -306,10 +323,223 @@ const TOOLS: ToolDef[] = [
   },
 ];
 
-const TOOL_SCHEMAS = TOOLS.map((t) => ({
-  type: "function",
-  function: { name: t.name, description: t.description, parameters: t.parameters },
-}));
+// ---------- Write tools (Phase B) ----------
+
+/** Whitelisted writable tables and the columns the agent may set. */
+const WRITABLE: Record<string, { columns: string[]; deletable?: boolean; label: string }> = {
+  pov_posts: {
+    label: "POV post",
+    deletable: true,
+    columns: ["title", "content", "excerpt", "post_type", "category", "language", "author_name", "min_tier", "is_visible", "is_featured", "is_hot_take", "display_order"],
+  },
+  books: {
+    label: "Book",
+    columns: ["slug", "title", "subtitle", "description", "cover_url", "author_name", "is_published"],
+  },
+  book_chapters: {
+    label: "Book chapter",
+    deletable: true,
+    columns: ["book_id", "slug", "title", "excerpt", "content", "min_tier", "chapter_number", "reading_minutes", "is_published"],
+  },
+  plans: {
+    label: "Plan",
+    columns: ["slug", "name", "tagline", "description", "price_inr", "billing_period", "duration_days", "features", "is_visible", "is_highlighted", "display_order"],
+  },
+  referral_links: {
+    label: "Referral link",
+    deletable: true,
+    columns: ["name", "description", "offer", "category", "logo", "referral_link", "bg_color", "text_color", "is_visible", "display_order"],
+  },
+  short_urls: {
+    label: "Short URL",
+    deletable: true,
+    columns: ["short_code", "original_url"],
+  },
+  portfolio_items: {
+    label: "Portfolio item",
+    deletable: true,
+    columns: ["title", "description", "long_description", "image_url", "live_url", "source_url", "tech_stack", "category", "platform", "status", "is_visible", "is_featured", "display_order"],
+  },
+  app_info: {
+    label: "App",
+    deletable: true,
+    columns: ["app_name", "app_description", "package_name", "version", "download_url", "play_store_url", "app_icon_url", "screenshots", "features", "is_visible"],
+  },
+  contact_submissions: {
+    label: "Contact message",
+    deletable: true,
+    columns: ["status"],
+  },
+  site_settings: {
+    label: "Site setting",
+    columns: ["key", "value", "category"],
+  },
+};
+
+const TIERS = new Set(["public", "starter", "signature", "sovereign"]);
+
+function sanitize(table: string, values: Record<string, unknown>) {
+  const cfg = WRITABLE[table];
+  if (!cfg) throw new Error(`Table '${table}' write ke liye allowed nahi hai. Allowed: ${Object.keys(WRITABLE).join(", ")}`);
+  const clean: Record<string, unknown> = {};
+  const rejected: string[] = [];
+  for (const [k, v] of Object.entries(values ?? {})) {
+    if (cfg.columns.includes(k)) clean[k] = v;
+    else rejected.push(k);
+  }
+  if (typeof clean["min_tier"] === "string" && !TIERS.has(clean["min_tier"] as string)) {
+    throw new Error(`min_tier '${clean["min_tier"]}' invalid — public | starter | signature | sovereign`);
+  }
+  if (Object.keys(clean).length === 0) throw new Error(`Koi valid column nahi mila. '${table}' ke allowed columns: ${cfg.columns.join(", ")}`);
+  return { clean, rejected, cfg };
+}
+
+const WRITE_TOOLS: ToolDef[] = [
+  {
+    name: "create_record",
+    description: "Nayi row banao ek allowed table mein (pov_posts, books, book_chapters, plans, referral_links, short_urls, portfolio_items, app_info, site_settings).",
+    parameters: {
+      type: "object",
+      properties: {
+        table: { type: "string", description: "table name" },
+        values: { type: "object", description: "column -> value map" },
+      },
+      required: ["table", "values"],
+    },
+    run: async (a, db) => {
+      const { clean, rejected, cfg } = sanitize(a.table, a.values);
+      const { data, error } = await db.from(a.table).insert(clean).select().maybeSingle();
+      if (error) return { error: error.message };
+      return { created: true, label: cfg.label, id: data?.id, row: data, ignored_fields: rejected };
+    },
+  },
+  {
+    name: "update_record",
+    description: "Existing row update karo. Sirf wahi fields bhejo jo badalne hain. id pehle read tool se nikalo.",
+    parameters: {
+      type: "object",
+      properties: {
+        table: { type: "string" },
+        id: { type: "string", description: "row ka uuid" },
+        values: { type: "object" },
+      },
+      required: ["table", "id", "values"],
+    },
+    run: async (a, db) => {
+      const { clean, rejected, cfg } = sanitize(a.table, a.values);
+      const { data: before } = await db.from(a.table).select("*").eq("id", a.id).maybeSingle();
+      if (!before) return { error: `${cfg.label} id '${a.id}' nahi mila` };
+      const { data, error } = await db.from(a.table).update(clean).eq("id", a.id).select().maybeSingle();
+      if (error) return { error: error.message };
+      const changed: Record<string, unknown> = {};
+      for (const k of Object.keys(clean)) changed[k] = { from: (before as any)[k], to: (data as any)?.[k] };
+      return { updated: true, label: cfg.label, id: a.id, changed, ignored_fields: rejected };
+    },
+  },
+  {
+    name: "delete_record",
+    description: "Row delete karo. DESTRUCTIVE — confirm:true zaroori hai aur pehle row read karke admin ko batana chahiye.",
+    parameters: {
+      type: "object",
+      properties: {
+        table: { type: "string" },
+        id: { type: "string" },
+        confirm: { type: "boolean", description: "true hona chahiye warna delete nahi hoga" },
+      },
+      required: ["table", "id", "confirm"],
+    },
+    run: async (a, db) => {
+      const cfg = WRITABLE[a.table];
+      if (!cfg) return { error: `Table '${a.table}' allowed nahi hai` };
+      if (!cfg.deletable) return { error: `${cfg.label} delete karna allowed nahi hai — sirf update ho sakta hai` };
+      if (a.confirm !== true) return { error: "confirm:true nahi mila — delete skip kiya. Admin se confirmation lo." };
+      const { data: before } = await db.from(a.table).select("*").eq("id", a.id).maybeSingle();
+      if (!before) return { error: `${cfg.label} id '${a.id}' nahi mila` };
+      const { error } = await db.from(a.table).delete().eq("id", a.id);
+      if (error) return { error: error.message };
+      return { deleted: true, label: cfg.label, id: a.id, deleted_row: before };
+    },
+  },
+  {
+    name: "set_site_setting",
+    description: "Site setting key ka value set karo (naya ho to bana dega).",
+    parameters: {
+      type: "object",
+      properties: {
+        key: { type: "string" },
+        value: { type: "string" },
+        category: { type: "string", description: "e.g. contact, social, general" },
+      },
+      required: ["key", "value"],
+    },
+    run: async (a, db) => {
+      const { data: existing } = await db.from("site_settings").select("*").eq("key", a.key).maybeSingle();
+      if (existing) {
+        const { error } = await db.from("site_settings").update({ value: String(a.value) }).eq("key", a.key);
+        if (error) return { error: error.message };
+        return { updated: true, key: a.key, from: existing.value, to: String(a.value) };
+      }
+      const { error } = await db.from("site_settings").insert({ key: a.key, value: String(a.value), category: a.category ?? "general" });
+      if (error) return { error: error.message };
+      return { created: true, key: a.key, value: String(a.value) };
+    },
+  },
+  {
+    name: "grant_membership",
+    description: "Kisi user ko plan dena / badalna. Email ya user_id do aur plan_slug (starter, signature, sovereign).",
+    parameters: {
+      type: "object",
+      properties: {
+        email: { type: "string" },
+        user_id: { type: "string" },
+        plan_slug: { type: "string" },
+        days: { type: "number", description: "kitne din valid; na do to plan ka default duration ya lifetime" },
+      },
+      required: ["plan_slug"],
+    },
+    run: async (a, db) => {
+      let userId: string | null = a.user_id ?? null;
+      if (!userId && a.email) {
+        const { data: list } = await db.auth.admin.listUsers({ perPage: 1000 });
+        const found = (list?.users ?? []).find((u: any) => (u.email ?? "").toLowerCase() === String(a.email).toLowerCase());
+        if (!found) return { error: `User '${a.email}' nahi mila` };
+        userId = found.id;
+      }
+      if (!userId) return { error: "email ya user_id chahiye" };
+
+      const { data: plan } = await db.from("plans").select("slug, name, duration_days").eq("slug", a.plan_slug).maybeSingle();
+      if (!plan) return { error: `Plan '${a.plan_slug}' nahi mila` };
+
+      const days = a.days ?? plan.duration_days ?? null;
+      const expires = days ? new Date(Date.now() + Number(days) * 86400000).toISOString() : null;
+
+      const { data: existing } = await db.from("memberships").select("id, plan_slug, status, expires_at").eq("user_id", userId).maybeSingle();
+      if (existing) {
+        const { error } = await db.from("memberships")
+          .update({ plan_slug: plan.slug, status: "active", source: "admin_ai", started_at: new Date().toISOString(), expires_at: expires })
+          .eq("id", existing.id);
+        if (error) return { error: error.message };
+        return { updated: true, user_id: userId, from: existing.plan_slug, to: plan.slug, expires_at: expires };
+      }
+      const { error } = await db.from("memberships")
+        .insert({ user_id: userId, plan_slug: plan.slug, status: "active", source: "admin_ai", expires_at: expires });
+      if (error) return { error: error.message };
+      return { created: true, user_id: userId, plan: plan.slug, expires_at: expires };
+    },
+  },
+];
+
+const ALL_TOOLS = [...TOOLS, ...WRITE_TOOLS];
+
+const toSchemas = (tools: ToolDef[]) =>
+  tools.map((t) => ({
+    type: "function",
+    function: { name: t.name, description: t.description, parameters: t.parameters },
+  }));
+
+const READ_SCHEMAS = toSchemas(TOOLS);
+const ALL_SCHEMAS = toSchemas(ALL_TOOLS);
+
 
 // ---------- LLM call (same Gemini chain the site uses) ----------
 
@@ -377,10 +607,16 @@ export async function handler(request: Request): Promise<Response> {
 
     const convo: any[] = [{ role: "system", content: systemPrompt(mode) }, ...messages.slice(-20)];
     const toolsUsed: string[] = [];
+    const writeLog: unknown[] = [];
+
+    // Write tools are only exposed outside read-only 'ask' mode.
+    const allowWrite = mode !== "ask";
+    const availableTools = allowWrite ? ALL_TOOLS : TOOLS;
+    const schemas = allowWrite ? ALL_SCHEMAS : READ_SCHEMAS;
 
     // --- tool loop (non-streaming rounds) ---
-    for (let round = 0; round < 5; round++) {
-      const resp = await callModel({ model, messages: convo, tools: TOOL_SCHEMAS, tool_choice: "auto" }, false);
+    for (let round = 0; round < 8; round++) {
+      const resp = await callModel({ model, messages: convo, tools: schemas, tool_choice: "auto" }, false);
       const data: any = await resp.json();
       const msg = data.choices?.[0]?.message;
       if (!msg) break;
@@ -395,19 +631,25 @@ export async function handler(request: Request): Promise<Response> {
 
       convo.push(msg);
       for (const call of calls) {
-        const tool = TOOLS.find((t) => t.name === call.function?.name);
+        const tool = availableTools.find((t) => t.name === call.function?.name);
         let result: unknown;
         if (!tool) {
-          result = { error: "unknown tool" };
+          result = WRITE_TOOLS.some((t) => t.name === call.function?.name)
+            ? { error: "Ask mode read-only hai — write tools available nahi. Default ya Edit mode use karein." }
+            : { error: "unknown tool" };
         } else {
           toolsUsed.push(tool.name);
           try {
             const args = call.function.arguments ? JSON.parse(call.function.arguments) : {};
             result = await tool.run(args, supabaseAdmin);
+            if (WRITE_TOOLS.some((t) => t.name === tool.name)) {
+              writeLog.push({ tool: tool.name, args, result });
+            }
           } catch (e: any) {
             result = { error: e?.message ?? "tool failed" };
           }
         }
+
         convo.push({
           role: "tool",
           tool_call_id: call.id,
@@ -418,7 +660,15 @@ export async function handler(request: Request): Promise<Response> {
 
     // --- final streaming answer ---
     const streamResp = await callModel({ model, messages: convo }, true);
-    await logActivity(supabaseAdmin, { admin_user_id: userData.user.id, thread_id: threadId, mode, model, prompt: promptText.slice(0, 2000), tools_used: toolsUsed, result_summary: "(streamed)" });
+    await logActivity(supabaseAdmin, {
+      admin_user_id: userData.user.id,
+      thread_id: threadId,
+      mode,
+      model,
+      prompt: promptText.slice(0, 2000),
+      tools_used: toolsUsed,
+      result_summary: writeLog.length > 0 ? JSON.stringify(writeLog).slice(0, 4000) : "(streamed)",
+    });
 
     return new Response(streamResp.body, {
       status: 200,
@@ -427,8 +677,10 @@ export async function handler(request: Request): Promise<Response> {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         "X-Tools-Used": toolsUsed.join(","),
+        "X-Writes-Applied": String(writeLog.length),
       },
     });
+
   } catch (e: any) {
     console.error("workspace-ai error:", e);
     return json({ error: e?.message ?? "Internal error" }, 500);

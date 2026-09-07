@@ -107,7 +107,10 @@ export function useWorkspaceAI() {
 
       const tools = (resp.headers.get("X-Tools-Used") || "").split(",").filter(Boolean);
       setLastTools(tools);
+      const writes = Number(resp.headers.get("X-Writes-Applied") || "0");
+      if (writes > 0) toast.success(`${writes} change${writes > 1 ? "s" : ""} apply ho gaya`);
       const sources = tools.length > 0 ? (["database"] as string[]) : (["ai"] as string[]);
+
 
       updateThread(thread.id, (t) => ({
         ...t,
