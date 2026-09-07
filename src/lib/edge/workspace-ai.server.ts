@@ -730,6 +730,19 @@ export async function handler(request: Request): Promise<Response> {
           content: JSON.stringify(result)?.slice(0, 12000) ?? "null",
         });
       }
+
+      if (pending.length > 0) {
+        await logActivity(supabaseAdmin, {
+          admin_user_id: userData.user.id,
+          thread_id: threadId,
+          mode,
+          model,
+          prompt: promptText.slice(0, 2000),
+          tools_used: toolsUsed,
+          result_summary: `approval_required: ${JSON.stringify(pending.map((p) => p.summary)).slice(0, 1500)}`,
+        });
+        return json({ type: "approval_required", pending });
+      }
     }
 
     // --- final streaming answer ---
