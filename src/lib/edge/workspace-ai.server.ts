@@ -607,10 +607,16 @@ export async function handler(request: Request): Promise<Response> {
 
     const convo: any[] = [{ role: "system", content: systemPrompt(mode) }, ...messages.slice(-20)];
     const toolsUsed: string[] = [];
+    const writeLog: unknown[] = [];
+
+    // Write tools are only exposed outside read-only 'ask' mode.
+    const allowWrite = mode !== "ask";
+    const availableTools = allowWrite ? ALL_TOOLS : TOOLS;
+    const schemas = allowWrite ? ALL_SCHEMAS : READ_SCHEMAS;
 
     // --- tool loop (non-streaming rounds) ---
-    for (let round = 0; round < 5; round++) {
-      const resp = await callModel({ model, messages: convo, tools: TOOL_SCHEMAS, tool_choice: "auto" }, false);
+    for (let round = 0; round < 8; round++) {
+      const resp = await callModel({ model, messages: convo, tools: schemas, tool_choice: "auto" }, false);
       const data: any = await resp.json();
       const msg = data.choices?.[0]?.message;
       if (!msg) break;
@@ -625,19 +631,25 @@ export async function handler(request: Request): Promise<Response> {
 
       convo.push(msg);
       for (const call of calls) {
-        const tool = TOOLS.find((t) => t.name === call.function?.name);
+        const tool = availableTools.find((t) => t.name === call.function?.name);
         let result: unknown;
         if (!tool) {
-          result = { error: "unknown tool" };
+          result = WRITE_TOOLS.some((t) => t.name === call.function?.name)
+            ? { error: "Ask mode read-only hai — write tools available nahi. Default ya Edit mode use karein." }
+            : { error: "unknown tool" };
         } else {
           toolsUsed.push(tool.name);
           try {
             const args = call.function.arguments ? JSON.parse(call.function.arguments) : {};
             result = await tool.run(args, supabaseAdmin);
+            if (WRITE_TOOLS.some((t) => t.name === tool.name)) {
+              writeLog.push({ tool: tool.name, args, result });
+            }
           } catch (e: any) {
             result = { error: e?.message ?? "tool failed" };
           }
         }
+
         convo.push({
           role: "tool",
           tool_call_id: call.id,
