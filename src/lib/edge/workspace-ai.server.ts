@@ -660,7 +660,15 @@ export async function handler(request: Request): Promise<Response> {
 
     // --- final streaming answer ---
     const streamResp = await callModel({ model, messages: convo }, true);
-    await logActivity(supabaseAdmin, { admin_user_id: userData.user.id, thread_id: threadId, mode, model, prompt: promptText.slice(0, 2000), tools_used: toolsUsed, result_summary: "(streamed)" });
+    await logActivity(supabaseAdmin, {
+      admin_user_id: userData.user.id,
+      thread_id: threadId,
+      mode,
+      model,
+      prompt: promptText.slice(0, 2000),
+      tools_used: toolsUsed,
+      result_summary: writeLog.length > 0 ? JSON.stringify(writeLog).slice(0, 4000) : "(streamed)",
+    });
 
     return new Response(streamResp.body, {
       status: 200,
@@ -669,8 +677,10 @@ export async function handler(request: Request): Promise<Response> {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         "X-Tools-Used": toolsUsed.join(","),
+        "X-Writes-Applied": String(writeLog.length),
       },
     });
+
   } catch (e: any) {
     console.error("workspace-ai error:", e);
     return json({ error: e?.message ?? "Internal error" }, 500);
