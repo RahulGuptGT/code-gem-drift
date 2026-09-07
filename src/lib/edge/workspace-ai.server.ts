@@ -3,9 +3,10 @@
 // Auth: caller must send a Supabase user access token in Authorization; the
 // token's user must have the 'admin' role. Everything else is rejected 401/403.
 //
-// Phase A scope: READ tools over the whole site (posts, book, users, plans,
-// payments, contacts, referrals, analytics, settings...). Edit/Agent mode is
-// recognized in the system prompt but write tools land in Phase B.
+// Phase A: READ tools over the whole site.
+// Phase B: WRITE tools (create/update/delete on whitelisted tables + membership
+// grants). Write tools are only exposed in 'auto' and 'edit' modes — 'ask' mode
+// is strictly read-only.
 
 import { GEMINI_CHAT_URL, GEMINI_CHAT_MODEL, mapGeminiModel } from "./_shared/geminiClient";
 
@@ -38,27 +39,43 @@ Tumhare paas poore site ka read access hai: POV posts, book chapters, plans, mem
 - Individual users ka personal data (email etc.) sirf tab do jab admin explicitly maange — admin hi hai, par fir bhi relevant columns hi do.
 - Kabhi bhi API keys, secrets, service tokens reveal mat karo.`;
 
+  const writeRules = `
+
+## TOOLS (WRITE ACCESS) — Phase B
+Tumhare paas ab write tools bhi hain:
+- \`create_record\` — nayi row banane ke liye (table + values).
+- \`update_record\` — existing row edit karne ke liye (table + id + sirf badalne wale fields).
+- \`delete_record\` — row delete karne ke liye (table + id + confirm:true).
+- \`grant_membership\` — kisi user ko plan dena/badalna (email ya user_id + plan_slug).
+- \`set_site_setting\` — site setting key ka value set karna.
+
+### WRITE RULES (STRICT)
+1. Update/delete se PEHLE hamesha relevant read tool chalao taaki sahi row id mile. id guess mat karo.
+2. \`update_record\` mein sirf wahi fields bhejo jo actually badalne hain — baaki chhod do.
+3. DELETE destructive hai: pehle row read karke admin ko batao kya delete hoga aur explicit "haan delete karo" milne par hi \`confirm: true\` ke saath chalao. Agar admin ne clearly delete bola hai to seedha kar sakte ho, par response mein kya delete hua wo clearly likho.
+4. Bulk destructive kaam (ek saath 5+ rows delete) mat karo — pehle confirm maango.
+5. Har write ke baad short summary do: kya badla, kis row mein, purani vs nayi value.
+6. Tool ne error diya to us error ko clearly batao — success ka jhooth kabhi mat bolo.
+7. min_tier values sirf: public, starter, signature, sovereign.`;
+
   if (mode === "ask") {
     return `${base}
 
-## MODE: ASK
-Sirf jawab do. Koi bhi change/badlav suggest karte waqt clearly bolo ki tumne kuch change NAHI kiya — sirf information di hai.`;
+## MODE: ASK (READ-ONLY)
+Sirf jawab do. Is mode mein write tools available hi nahi hain. Agar admin koi change maange to batao ki Ask mode read-only hai — Default ya Edit mode mein switch karke bolein.`;
   }
   if (mode === "edit") {
-    return `${base}
+    return `${base}${writeRules}
 
 ## MODE: EDIT (AGENT)
-Admin chahta hai ki tum site mein badlav karo. Abhi tumhare paas sirf READ tools hain — write/update/delete tools agle phase mein grant honge. Isliye:
-1. Jo change maanga gaya hai, pehle relevant data read karke samjho.
-2. Phir clearly batao EXACTLY kya change karna chahiye (kis row mein, kaunsa field, kya value) — ek precise action plan do.
-3. Bata do ki write access abhi enable nahi hai, aur admin chahe to admin panel mein manually ye change kar sakta hai, ya next phase ke baad tum khud kar doge.
-Kabhi claim mat karo ki tumne kuch change kar diya jab tak write tool ne confirm na kiya.`;
+Admin chahta hai ki tum site mein badlav karo. Read karo → change apply karo (write tools se) → summary do. Bina zaroori clarification ke ruk mat jao; agar request ambiguous hai tabhi sawaal poocho. Kabhi claim mat karo ki kuch change hua jab tak write tool ne success confirm na kiya ho.`;
   }
-  return `${base}
+  return `${base}${writeRules}
 
 ## MODE: AUTO
-Khud decide karo: sawaal hai to sirf jawab do; badlav ki request hai to data read karke precise action plan do aur bata do ki write tools abhi Phase B mein aayenge. Kabhi claim mat karo ki change ho gaya jab tak write tool confirm na kare.`;
+Khud decide karo: sawaal hai to sirf jawab do; badlav ki request hai to write tools se change apply karo aur summary do. Destructive delete ke liye confirm rule follow karo. Kabhi claim mat karo ki change ho gaya jab tak write tool confirm na kare.`;
 }
+
 
 // ---------- Read tools ----------
 
