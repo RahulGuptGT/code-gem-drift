@@ -530,6 +530,64 @@ const WRITE_TOOLS: ToolDef[] = [
 ];
 
 const ALL_TOOLS = [...TOOLS, ...WRITE_TOOLS];
+const WRITE_TOOL_NAMES = new Set(WRITE_TOOLS.map((t) => t.name));
+
+/** Deterministic key so a client approval matches exactly one proposed action. */
+function stableKey(name: string, args: unknown): string {
+  const norm = (v: any): any => {
+    if (Array.isArray(v)) return v.map(norm);
+    if (v && typeof v === "object") {
+      return Object.keys(v).sort().reduce((o: any, k) => { o[k] = norm(v[k]); return o; }, {});
+    }
+    return v;
+  };
+  return `${name}|${JSON.stringify(norm(args ?? {}))}`;
+}
+
+const rowTitle = (row: any) =>
+  row?.title ?? row?.name ?? row?.app_name ?? row?.slug ?? row?.short_code ?? row?.key ?? row?.id ?? "—";
+
+/** Human-readable preview of a proposed write, shown to the admin before it runs. */
+async function describeWrite(name: string, args: any, db: any) {
+  const label = (t: string) => WRITABLE[t]?.label ?? t;
+  try {
+    if (name === "create_record") {
+      return { action: "create", destructive: false, target: label(args.table), summary: `Naya ${label(args.table)} banega`, values: args.values };
+    }
+    if (name === "update_record") {
+      const { data: before } = await db.from(args.table).select("*").eq("id", args.id).maybeSingle();
+      const changes: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(args.values ?? {})) changes[k] = { from: (before as any)?.[k], to: v };
+      return { action: "update", destructive: false, target: label(args.table), summary: `${label(args.table)} "${rowTitle(before)}" update hoga`, changes };
+    }
+    if (name === "delete_record") {
+      const { data: before } = await db.from(args.table).select("*").eq("id", args.id).maybeSingle();
+      return { action: "delete", destructive: true, target: label(args.table), summary: `${label(args.table)} "${rowTitle(before)}" permanently delete ho jayega`, row: before };
+    }
+    if (name === "set_site_setting") {
+      const { data: before } = await db.from("site_settings").select("*").eq("key", args.key).maybeSingle();
+      return {
+        action: before ? "update" : "create",
+        destructive: false,
+        target: "Site setting",
+        summary: `Setting "${args.key}" set hogi`,
+        changes: { value: { from: (before as any)?.value, to: String(args.value) } },
+      };
+    }
+    if (name === "grant_membership") {
+      return {
+        action: "update",
+        destructive: false,
+        target: "Membership",
+        summary: `${args.email ?? args.user_id} ko "${args.plan_slug}" plan milega${args.days ? ` (${args.days} din)` : ""}`,
+        values: args,
+      };
+    }
+  } catch {
+    /* preview best-effort */
+  }
+  return { action: "write", destructive: true, target: name, summary: `${name} chalega` };
+}
 
 const toSchemas = (tools: ToolDef[]) =>
   tools.map((t) => ({
