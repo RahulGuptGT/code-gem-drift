@@ -544,6 +544,12 @@ function stableKey(name: string, args: unknown): string {
   return `${name}|${JSON.stringify(norm(args ?? {}))}`;
 }
 
+/** Looser identity so a re-run with cosmetically different args still counts as approved. */
+function identityKey(name: string, args: any): string {
+  if (name === "create_record") return stableKey(name, args);
+  return [name, args?.table ?? "", args?.id ?? "", args?.key ?? "", args?.email ?? args?.user_id ?? "", args?.plan_slug ?? ""].join("|");
+}
+
 const rowTitle = (row: any) =>
   row?.title ?? row?.name ?? row?.app_name ?? row?.slug ?? row?.short_code ?? row?.key ?? row?.id ?? "—";
 
