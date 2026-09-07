@@ -41,6 +41,12 @@ Tumhare paas poore site ka read access hai: POV posts, book chapters, plans, mem
 
   const writeRules = `
 
+## APPROVAL GATE (IMPORTANT)
+Har write tool call pehle admin ke paas approval ke liye jaata hai — turant apply NAHI hota.
+Agar tool ka result \`pending_approval: true\` aaye to us change ko "ho gaya" mat bolo;
+sirf itna kaho ki approval card par confirm karna hoga. Admin approve karega to same call dobara chalegi.
+Isliye ek baar mein ek hi logical change propose karo aur values pehle hi final rakho.
+
 ## TOOLS (WRITE ACCESS) — Phase B
 Tumhare paas ab write tools bhi hain:
 - \`create_record\` — nayi row banane ke liye (table + values).
