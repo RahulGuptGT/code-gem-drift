@@ -4,6 +4,7 @@ import { Bot, Database } from "lucide-react";
 import { ThreadSidebar } from "@/components/support-chat/ThreadSidebar";
 import { MessageBubble } from "@/components/support-chat/MessageBubble";
 import { WorkspaceComposer } from "./WorkspaceComposer";
+import { ApprovalCard } from "./ApprovalCard";
 import { useWorkspaceAI } from "./useWorkspaceAI";
 
 const SUGGESTIONS = [
@@ -119,6 +120,15 @@ export function WorkspaceAI() {
               ))
             )}
 
+            {chat.pending && chat.pending.length > 0 && (
+              <ApprovalCard
+                items={chat.pending}
+                onApprove={chat.approvePending}
+                onReject={chat.rejectPending}
+                busy={chat.isLoading}
+              />
+            )}
+
             {chat.isLoading && lastIsUser && (
               <div className="flex justify-start">
                 <div className="bg-card/70 backdrop-blur border border-border/40 rounded-2xl rounded-bl-md px-3.5 py-2.5 flex items-center gap-2">
@@ -137,7 +147,7 @@ export function WorkspaceAI() {
 
         <WorkspaceComposer
           onSend={chat.send}
-          disabled={chat.isLoading}
+          disabled={chat.isLoading || !!chat.pending}
           isStreaming={chat.isLoading}
           onStop={chat.stop}
           mode={chat.mode}

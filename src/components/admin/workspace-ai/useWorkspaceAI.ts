@@ -16,6 +16,19 @@ import { toast } from "sonner";
 
 const CHAT_URL = "/api/public/workspace-ai";
 
+export type ApprovalRef = { tool: string; args: Record<string, unknown> };
+
+export type PendingWrite = ApprovalRef & {
+  key: string;
+  action: string;
+  destructive?: boolean;
+  target: string;
+  summary: string;
+  values?: Record<string, unknown>;
+  changes?: Record<string, { from?: unknown; to?: unknown }>;
+  row?: Record<string, unknown>;
+};
+
 export function useWorkspaceAI() {
   const [threads, setThreads] = useState<Thread[]>(() => loadWorkspaceThreads());
   const [activeId, setActiveId] = useState<string | null>(() => loadWorkspaceThreads()[0]?.id ?? null);
@@ -23,6 +36,8 @@ export function useWorkspaceAI() {
   const [mode, setMode] = useState<WorkspaceMode>("auto");
   const [model, setModel] = useState<WorkspaceModel>("gemini-3.6-flash");
   const [lastTools, setLastTools] = useState<string[]>([]);
+  const [pending, setPending] = useState<PendingWrite[] | null>(null);
+  const pendingThreadRef = useRef<Thread | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const active = threads.find((t) => t.id === activeId) || null;
@@ -68,7 +83,7 @@ export function useWorkspaceAI() {
   );
 
   const stream = useCallback(
-    async (thread: Thread) => {
+    async (thread: Thread, approvals?: ApprovalRef[]) => {
       const ctl = new AbortController();
       abortRef.current = ctl;
 
@@ -84,6 +99,7 @@ export function useWorkspaceAI() {
           threadId: thread.id,
           mode,
           model,
+          approvals: approvals ?? [],
           messages: thread.messages.map((m) => {
             if (m.role === "user" && m.attachment) {
               return {
@@ -102,6 +118,16 @@ export function useWorkspaceAI() {
       if (!resp.ok) {
         const err = await resp.json().catch(() => ({} as any));
         throw new Error((err as any).error || `Request failed (${resp.status})`);
+      }
+      // Approval gate — server proposed changes but did NOT apply them yet.
+      if ((resp.headers.get("content-type") || "").includes("application/json")) {
+        const data = await resp.json();
+        if (data?.type === "approval_required") {
+          pendingThreadRef.current = thread;
+          setPending(data.pending as PendingWrite[]);
+          return;
+        }
+        throw new Error(data?.error || "Unexpected response");
       }
       if (!resp.body) throw new Error("No response body");
 
@@ -201,6 +227,39 @@ export function useWorkspaceAI() {
     [ensureThread, stream, updateThread]
   );
 
+  const approvePending = useCallback(async () => {
+    const items = pending;
+    const thread = pendingThreadRef.current;
+    if (!items || !thread) return;
+    setPending(null);
+    setIsLoading(true);
+    try {
+      await stream(thread, items.map((p) => ({ tool: p.tool, args: p.args })));
+    } catch (e: any) {
+      if (e.name !== "AbortError") toast.error(e?.message ?? "Change apply nahi ho paaya");
+    } finally {
+      setIsLoading(false);
+      pendingThreadRef.current = null;
+    }
+  }, [pending, stream]);
+
+  const rejectPending = useCallback(() => {
+    const thread = pendingThreadRef.current;
+    setPending(null);
+    pendingThreadRef.current = null;
+    if (thread) {
+      updateThread(thread.id, (t) => ({
+        ...t,
+        messages: [
+          ...t.messages,
+          { role: "assistant", content: "Theek hai — koi change nahi kiya gaya. ❌", createdAt: Date.now() },
+        ],
+        updatedAt: Date.now(),
+      }));
+    }
+    toast.message("Change cancel kar diya");
+  }, [updateThread]);
+
   const stop = useCallback(() => {
     abortRef.current?.abort();
     setIsLoading(false);
@@ -240,5 +299,8 @@ export function useWorkspaceAI() {
     model,
     setModel,
     lastTools,
+    pending,
+    approvePending,
+    rejectPending,
   };
 }

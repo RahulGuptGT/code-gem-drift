@@ -41,6 +41,12 @@ Tumhare paas poore site ka read access hai: POV posts, book chapters, plans, mem
 
   const writeRules = `
 
+## APPROVAL GATE (IMPORTANT)
+Har write tool call pehle admin ke paas approval ke liye jaata hai — turant apply NAHI hota.
+Agar tool ka result \`pending_approval: true\` aaye to us change ko "ho gaya" mat bolo;
+sirf itna kaho ki approval card par confirm karna hoga. Admin approve karega to same call dobara chalegi.
+Isliye ek baar mein ek hi logical change propose karo aur values pehle hi final rakho.
+
 ## TOOLS (WRITE ACCESS) — Phase B
 Tumhare paas ab write tools bhi hain:
 - \`create_record\` — nayi row banane ke liye (table + values).
@@ -530,6 +536,70 @@ const WRITE_TOOLS: ToolDef[] = [
 ];
 
 const ALL_TOOLS = [...TOOLS, ...WRITE_TOOLS];
+const WRITE_TOOL_NAMES = new Set(WRITE_TOOLS.map((t) => t.name));
+
+/** Deterministic key so a client approval matches exactly one proposed action. */
+function stableKey(name: string, args: unknown): string {
+  const norm = (v: any): any => {
+    if (Array.isArray(v)) return v.map(norm);
+    if (v && typeof v === "object") {
+      return Object.keys(v).sort().reduce((o: any, k) => { o[k] = norm(v[k]); return o; }, {});
+    }
+    return v;
+  };
+  return `${name}|${JSON.stringify(norm(args ?? {}))}`;
+}
+
+/** Looser identity so a re-run with cosmetically different args still counts as approved. */
+function identityKey(name: string, args: any): string {
+  if (name === "create_record") return stableKey(name, args);
+  return [name, args?.table ?? "", args?.id ?? "", args?.key ?? "", args?.email ?? args?.user_id ?? "", args?.plan_slug ?? ""].join("|");
+}
+
+const rowTitle = (row: any) =>
+  row?.title ?? row?.name ?? row?.app_name ?? row?.slug ?? row?.short_code ?? row?.key ?? row?.id ?? "—";
+
+/** Human-readable preview of a proposed write, shown to the admin before it runs. */
+async function describeWrite(name: string, args: any, db: any) {
+  const label = (t: string) => WRITABLE[t]?.label ?? t;
+  try {
+    if (name === "create_record") {
+      return { action: "create", destructive: false, target: label(args.table), summary: `Naya ${label(args.table)} banega`, values: args.values };
+    }
+    if (name === "update_record") {
+      const { data: before } = await db.from(args.table).select("*").eq("id", args.id).maybeSingle();
+      const changes: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(args.values ?? {})) changes[k] = { from: (before as any)?.[k], to: v };
+      return { action: "update", destructive: false, target: label(args.table), summary: `${label(args.table)} "${rowTitle(before)}" update hoga`, changes };
+    }
+    if (name === "delete_record") {
+      const { data: before } = await db.from(args.table).select("*").eq("id", args.id).maybeSingle();
+      return { action: "delete", destructive: true, target: label(args.table), summary: `${label(args.table)} "${rowTitle(before)}" permanently delete ho jayega`, row: before };
+    }
+    if (name === "set_site_setting") {
+      const { data: before } = await db.from("site_settings").select("*").eq("key", args.key).maybeSingle();
+      return {
+        action: before ? "update" : "create",
+        destructive: false,
+        target: "Site setting",
+        summary: `Setting "${args.key}" set hogi`,
+        changes: { value: { from: (before as any)?.value, to: String(args.value) } },
+      };
+    }
+    if (name === "grant_membership") {
+      return {
+        action: "update",
+        destructive: false,
+        target: "Membership",
+        summary: `${args.email ?? args.user_id} ko "${args.plan_slug}" plan milega${args.days ? ` (${args.days} din)` : ""}`,
+        values: args,
+      };
+    }
+  } catch {
+    /* preview best-effort */
+  }
+  return { action: "write", destructive: true, target: name, summary: `${name} chalega` };
+}
 
 const toSchemas = (tools: ToolDef[]) =>
   tools.map((t) => ({
@@ -609,6 +679,19 @@ export async function handler(request: Request): Promise<Response> {
     const toolsUsed: string[] = [];
     const writeLog: unknown[] = [];
 
+    // Approval gate: a write only runs if the admin explicitly approved this exact action.
+    const approvals = new Set<string>(
+      (Array.isArray(body.approvals) ? body.approvals : [])
+        .filter((a: any) => a && typeof a.tool === "string")
+        .map((a: any) => stableKey(a.tool, a.args))
+    );
+    const approvalIds = new Set<string>(
+      (Array.isArray(body.approvals) ? body.approvals : [])
+        .filter((a: any) => a && typeof a.tool === "string")
+        .map((a: any) => identityKey(a.tool, a.args))
+    );
+    const pending: any[] = [];
+
     // Write tools are only exposed outside read-only 'ask' mode.
     const allowWrite = mode !== "ask";
     const availableTools = allowWrite ? ALL_TOOLS : TOOLS;
@@ -641,9 +724,18 @@ export async function handler(request: Request): Promise<Response> {
           toolsUsed.push(tool.name);
           try {
             const args = call.function.arguments ? JSON.parse(call.function.arguments) : {};
-            result = await tool.run(args, supabaseAdmin);
-            if (WRITE_TOOLS.some((t) => t.name === tool.name)) {
-              writeLog.push({ tool: tool.name, args, result });
+            const isWrite = WRITE_TOOL_NAMES.has(tool.name);
+            const key = isWrite ? stableKey(tool.name, args) : "";
+
+            const approved = isWrite && (approvals.has(key) || approvalIds.has(identityKey(tool.name, args)));
+            if (isWrite && !approved) {
+              // Do NOT execute — queue it for admin approval instead.
+              const preview = await describeWrite(tool.name, args, supabaseAdmin);
+              pending.push({ key, tool: tool.name, args, ...preview });
+              result = { pending_approval: true, note: "Admin ki approval ka intezaar hai — abhi kuch change nahi hua." };
+            } else {
+              result = await tool.run(args, supabaseAdmin);
+              if (isWrite) writeLog.push({ tool: tool.name, args, result });
             }
           } catch (e: any) {
             result = { error: e?.message ?? "tool failed" };
@@ -655,6 +747,19 @@ export async function handler(request: Request): Promise<Response> {
           tool_call_id: call.id,
           content: JSON.stringify(result)?.slice(0, 12000) ?? "null",
         });
+      }
+
+      if (pending.length > 0) {
+        await logActivity(supabaseAdmin, {
+          admin_user_id: userData.user.id,
+          thread_id: threadId,
+          mode,
+          model,
+          prompt: promptText.slice(0, 2000),
+          tools_used: toolsUsed,
+          result_summary: `approval_required: ${JSON.stringify(pending.map((p) => p.summary)).slice(0, 1500)}`,
+        });
+        return json({ type: "approval_required", pending });
       }
     }
 
