@@ -667,6 +667,14 @@ export async function handler(request: Request): Promise<Response> {
     const toolsUsed: string[] = [];
     const writeLog: unknown[] = [];
 
+    // Approval gate: a write only runs if the admin explicitly approved this exact action.
+    const approvals = new Set<string>(
+      (Array.isArray(body.approvals) ? body.approvals : [])
+        .filter((a: any) => a && typeof a.tool === "string")
+        .map((a: any) => stableKey(a.tool, a.args))
+    );
+    const pending: any[] = [];
+
     // Write tools are only exposed outside read-only 'ask' mode.
     const allowWrite = mode !== "ask";
     const availableTools = allowWrite ? ALL_TOOLS : TOOLS;
