@@ -21,6 +21,10 @@ const MODEL_OPTIONS = new Set([
   "gemini-3.6-flash",
   "gemini-3.5-flash-lite",
   "gemini-3.1-pro-preview",
+  "qwen3.8-27b",
+  "deepseek-v4-flash",
+  "gpt-5.6-luna",
+  "gpt-6-astra",
 ]);
 
 function systemPrompt(mode: Mode): string {
@@ -611,17 +615,43 @@ const READ_SCHEMAS = toSchemas(TOOLS);
 const ALL_SCHEMAS = toSchemas(ALL_TOOLS);
 
 
-// ---------- LLM call (same Gemini chain the site uses) ----------
+// ---------- LLM call (Gemini / Lovable / Experiential Labs) ----------
+
+const EXPERIENTIAL_MODELS = new Set([
+  "qwen3.8-27b",
+  "deepseek-v4-flash",
+  "gpt-5.6-luna",
+  "gpt-6-astra",
+]);
+const EXPERIENTIAL_CHAT_URL = "https://api.experientiallabs.ai/v1/chat/completions";
 
 async function callModel(body: Record<string, unknown>, stream: boolean): Promise<Response> {
   const geminiKey = process.env["GEMINI_API_KEY"];
   const lovableKey = process.env["LOVABLE_API_KEY"];
-  const attempts: Array<{ url: string; key: string; model: string }> = [];
+  const experientialKey = process.env["EXPERIENTIAL_LABS_API_KEY"];
+  const attempts: Array<{ url: string; key: string; model: string; label: string }> = [];
 
-  const chosen = mapGeminiModel(body.model as string);
-  if (geminiKey) attempts.push({ url: GEMINI_CHAT_URL, key: geminiKey, model: chosen });
-  if (geminiKey && chosen !== GEMINI_CHAT_MODEL) attempts.push({ url: GEMINI_CHAT_URL, key: geminiKey, model: GEMINI_CHAT_MODEL });
-  if (lovableKey) attempts.push({ url: "https://ai.gateway.lovable.dev/v1/chat/completions", key: lovableKey, model: "google/gemini-3.7-flash" });
+  const requested = String(body.model || "");
+
+  // Experiential Labs free/promotional models — route directly to their OpenAI-compatible gateway.
+  if (EXPERIENTIAL_MODELS.has(requested) && experientialKey) {
+    attempts.push({ url: EXPERIENTIAL_CHAT_URL, key: experientialKey, model: requested, label: `experiential:${requested}` });
+  }
+
+  // Existing Gemini + Lovable fallback chain for Gemini-named models, or if Experiential is unavailable.
+  const chosen = mapGeminiModel(requested);
+  if (geminiKey) attempts.push({ url: GEMINI_CHAT_URL, key: geminiKey, model: chosen, label: `gemini:${chosen}` });
+  if (geminiKey && chosen !== GEMINI_CHAT_MODEL) {
+    attempts.push({ url: GEMINI_CHAT_URL, key: geminiKey, model: GEMINI_CHAT_MODEL, label: `gemini:${GEMINI_CHAT_MODEL}` });
+  }
+  if (lovableKey) {
+    attempts.push({
+      url: "https://ai.gateway.lovable.dev/v1/chat/completions",
+      key: lovableKey,
+      model: "google/gemini-3.7-flash",
+      label: "lovable:google/gemini-3.7-flash",
+    });
+  }
 
   let lastErr = "no provider configured";
   for (const t of attempts) {
@@ -631,13 +661,18 @@ async function callModel(body: Record<string, unknown>, stream: boolean): Promis
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${t.key}` },
         body: JSON.stringify({ ...body, model: t.model, stream }),
       });
-      if (resp.ok) return resp;
+      if (resp.ok) {
+        console.log(`[workspace-ai] model routed via ${t.label}`);
+        return resp;
+      }
       const status = resp.status;
       const txt = await resp.text().catch(() => "");
-      lastErr = `${t.model}: HTTP ${status} ${txt.slice(0, 200)}`;
+      lastErr = `${t.label}: HTTP ${status} ${txt.slice(0, 200)}`;
+      console.warn(`[workspace-ai] ${t.label} failed ${status}: ${txt.slice(0, 200)}`);
       if (![402, 403, 429].includes(status) && status < 500) break; // terminal
     } catch (e: any) {
       lastErr = e?.message ?? "network error";
+      console.warn(`[workspace-ai] ${e?.message ?? "network error"}`);
     }
   }
   throw new Error(`AI call failed — ${lastErr}`);
