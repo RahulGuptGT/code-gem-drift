@@ -21,6 +21,10 @@ const MODEL_OPTIONS = new Set([
   "gemini-3.6-flash",
   "gemini-3.5-flash-lite",
   "gemini-3.1-pro-preview",
+  "qwen3.8-27b",
+  "deepseek-v4-flash",
+  "gpt-5.6-luna",
+  "gpt-6-astra",
 ]);
 
 function systemPrompt(mode: Mode): string {
